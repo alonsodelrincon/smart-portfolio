@@ -3,8 +3,8 @@ import pathlib
 from config import DATA_DIR
 
 DEFAULT_ASSETS_DB = {
-    "V1": "Mixed funds until 24/01/2026",
-    "V2": "Indexed world, SP500 and emerging markets fund + AZVALOR + HAMCO until 24/01/2026"
+    "V1": "Fondos indexados y de gestión activa 24/01/2026",
+    "V2": "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"
 }
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
