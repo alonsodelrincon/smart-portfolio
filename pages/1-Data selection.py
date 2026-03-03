@@ -35,7 +35,7 @@ market_data = read_key('market_data', None)
 #delete_key('market_data')
 
 if market_data is None:
-    st.error(f"¡Error! Unknown error appeared, please, reset the app")
+    st.error(f"¡Error! Ha ocurrido un error desconocido, por favor, reinicia la aplicación.")
     st.stop()
 
 
@@ -43,8 +43,10 @@ if market_data is None:
 
 load_widget("asset_selection", list(market_data.selected_assets.index))
 
+st.subheader("📥 Selección de activos locales")
+
 selected_assets = st.multiselect(
-    label="Select assets",
+    label="Selecciona los activos del modelo",
     options= market_data.local_assets.index,
     format_func=lambda x: market_data.local_assets.loc[x].asset_name,
     key="_asset_selection",
@@ -77,6 +79,9 @@ column_config = {
     "asset_name": st.column_config.TextColumn("Nombre")
 }
 
+st.subheader("📥 Importación de activos")
+st.caption("Añade o edita los activos que deseas incluir en el análisis especificando su ticker y nombre (ej: AAPL - Apple).")
+
 asset_import_data_editor = st.data_editor(
     import_df,
     column_config=column_config,
@@ -100,7 +105,7 @@ if validate_import_df(market_data, asset_import_data_editor) and not equal_impor
 #EN ESTE PUNTO VALIDAMOS EL NÚMERO DE ASSETS, SI EL ESTADO DE MARKET DATA NO ES VÁLIDO RESETEAMOS
 
 if not market_data.valid:
-    st.error(f"¡Error! At least 2 assets must be loaded")
+    st.error(f"¡Error! Debes especificar al menos 2 activos.")
 
     delete_key('dates_slider_selector')
 
@@ -160,9 +165,9 @@ for asset in assets:
     )
 
 total_returns_fig.update_layout(
-    title="Variación del valor liquidativo de los activos",
-    xaxis_title="Date",
-    yaxis_title="Returns",
+    title="Evolución del valor liquidativo de los activos",
+    xaxis_title="Fecha",
+    yaxis_title="Valor liquidativo",
     template="plotly_white"
 )
 
@@ -186,9 +191,9 @@ for asset in assets:
     )
 
 pct_returns_fig.update_layout(
-    title="Retornos porcentuales diarios",
-    xaxis_title="Date",
-    yaxis_title="Returns",
+    title="Rentabilidad diaria (%)",
+    xaxis_title="Fecha",
+    yaxis_title="Rentabilidad (%)",
     template="plotly_white"
 )
 

@@ -61,7 +61,7 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
                 marker=dict(size=10, color='red'),
                 text=ind_portfolio_names,
                 textposition="top center",
-                name="Individual portfolios"
+                name="Carteras de un activo"
             )
         )
 
@@ -78,19 +78,19 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
                 marker=dict(size=10, color='green'),
                 text=pers_portfolio_names,
                 textposition="top center",
-                name="Custom portfolios"
+                name="Carteras personalizadas"
             )
         )
 
     efficient_frontier_fig.update_layout(
-        title="Frontera eficiente de la cartera",
+        title="",
         xaxis=dict(
             title = "Riesgo anual",
             #range=[min(portfolio_risks), max(portfolio_risks)],
             #fixedrange=False  # True si quieres que no se pueda hacer zoom
         ),
         yaxis=dict(
-            title = "Rentabilidad anual",
+            title = "Rentabilidad (%)",
             #range=[min(portfolio_returns), max(portfolio_returns)],
             #fixedrange=False  # True si quieres que no se pueda hacer zoom
         ),
@@ -120,7 +120,9 @@ def plot_selected_portfolio(portfolio):
     )
 
     pie_chart_fig.update_traces(
-        textinfo='label+percent'
+        textinfo='label+percent',
+        textposition='inside',           # fuerza los textos dentro de la porción
+        insidetextorientation='radial'   # gira los textos para que sigan el ángulo de la porción
     )
 
     st.plotly_chart(pie_chart_fig, width="content")
@@ -132,7 +134,7 @@ def plot_selected_portfolio(portfolio):
 market_data = read_key('market_data', None)
 
 if market_data is None or not market_data.valid:
-    st.error(f"Assets must be defined first!")
+    st.error(f"¡Error! Debes definir los activos primero")
 
     delete_key('market_data')
     delete_key('returns_covariance_model')
@@ -150,7 +152,7 @@ if returns_covariance_model is None:
     delete_key('portfolio_model')
 
     if returns_covariance_model is None:
-        st.error(f"¡Error! Unknown error appeared, please, reset the app")
+        st.error(f"¡Error! Ha ocurrido un error desconocido, por favor, reinicia la aplicación.")
 
         delete_key('returns_covariance_model')
 
@@ -160,7 +162,7 @@ loaded = load_key('portfolio_model', lambda: default_portfolio_model(returns_cov
 portfolio_model = read_key('portfolio_model', None)
 
 if portfolio_model is None:
-    st.error(f"¡Error! Unknown error appeared, please, reset the app")
+    st.error(f"¡Error! Ha ocurrido un error desconocido, por favor, reinicia la aplicación.")
     st.stop()
 
 if loaded:
@@ -195,8 +197,10 @@ if n_steps != n_portfolios:
 
 #DEFINICIÓN DE WIDGETS
 
+st.subheader("Frontera eficiente")
+
 efficient_frontier_selected_portfolio = st.slider(
-    label = "Efficient frontier", 
+    label = "Selecciona la cartera sobre la frontera eficiente", 
     min_value = 0, 
     max_value = n_portfolios-1, 
     step = 1,
@@ -274,13 +278,13 @@ col1, col2 = st.columns(2)
 with col1:
     show_individual_assets = st.toggle(
         "Activos individuales",
-        help="Mostrar carteras formadas por un único activo"
+        help="Mostrar las carteras formadas por un único activo"
     )
 
 with col2:
     show_custom_portfolios = st.toggle(
         "Carteras personalizadas",
-        help="Crear nuevas carteras manualmente"
+        help="Crear nuevas carteras personalizadas"
     )
 
 individual_portfolios = None
@@ -311,7 +315,10 @@ if show_custom_portfolios:
     custom_portfolio_df = pd.DataFrame(columns=columns)
     custom_portfolio_df.set_index('name')
 
-    st.caption("Configura nuevas carteras especificando su nombre y el peso de cada activo.")
+    st.caption(
+        "Configura nuevas carteras especificando su nombre y el peso de cada activo. "
+        "Los pesos se normalizarán automáticamente."
+    )
 
     custom_portfolio = st.data_editor(
         custom_portfolio_df,
@@ -338,18 +345,29 @@ if show_custom_portfolios:
             custom_portfolio_list = tmp_portfolios
 
 
-plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios, custom_portfolio_list)
+frontier_col, portfolio_col = st.columns([2, 1])
 
-efficient_frontier_n_steps = st.number_input(
-    "Select number of steps in efficient frontier",
-    min_value = 2, 
-    max_value = 100,
-    step = 1,
-    key="_efficient_frontier_n_steps",
-    on_change=write_widget,
-    args=["efficient_frontier_n_steps"]
-)
+#with frontier_col:
+plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios, custom_portfolio_list)
+#with portfolio_col:
+
+st.subheader("Cartera seleccionada")
 
 plot_selected_portfolio(efficient_frontier[efficient_frontier_selected_portfolio])
+
+col, _ = st.columns([1, 5])
+
+with col:
+    efficient_frontier_n_steps = st.number_input(
+        "Número de carteras a calcular en la frontera eficiente",
+        min_value = 2, 
+        max_value = 100,
+        step = 1,
+        key="_efficient_frontier_n_steps",
+        on_change=write_widget,
+        args=["efficient_frontier_n_steps"]
+    )
+
+
 
 write_key('portfolio_model', portfolio_model)

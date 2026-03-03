@@ -1,4 +1,38 @@
 import streamlit as st
+import pathlib
+from config import DATA_DIR
+
+DEFAULT_ASSETS_DB = {
+    "V1": "Mixed funds until 24/01/2026",
+    "V2": "Indexed world, SP500 and emerging markets fund + AZVALOR + HAMCO until 24/01/2026"
+}
+
+BASE_DIR = pathlib.Path(__file__).resolve().parent
+
+def reset_session():
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+
+def init_db():
+    if 'db' not in st.session_state:
+        reset_session()
+        db = list(DEFAULT_ASSETS_DB.keys())[0]
+        st.session_state.db = db
+
+def set_db(db: str):
+    if db not in DEFAULT_ASSETS_DB:
+        raise ValueError(f"{db} no es una DB válida")
+
+    if st.session_state.db != db:
+        reset_session()
+        st.session_state.db = db
+
+def db_path():
+    if 'db' not in st.session_state:
+        init_db()
+
+    data_path = (DATA_DIR / st.session_state.db).resolve()
+    return data_path
 
 def set_page(page):
     if 'recent_page' not in st.session_state:

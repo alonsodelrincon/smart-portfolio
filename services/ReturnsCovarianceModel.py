@@ -21,7 +21,7 @@ class ReturnsCovarianceModel:
         WHM_EWMA = 'Weighted historical mean: Exponential weighted moving average'
         WHM_BARLETT = 'Weighted historical mean: Barlett method'
         WHM_PARZEN = 'Weighted historical mean: Parzen method'
-        WHM_TUKEY_HANNING = 'Weighted historical mean: Tuckey-Hanning method'
+        WHM_TUKEY_HANNING = 'Weighted historical mean: Tukey-Hanning method'
         WHM_TRIM = 'Weighted historical mean: Trimmed mean'
         WHM_WINS = 'Weighted historical mean: Winsorized mean'
         SHRINKAGE = 'Shrinkage method with asset return average'
