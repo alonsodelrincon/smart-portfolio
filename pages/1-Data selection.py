@@ -43,7 +43,7 @@ if market_data is None:
 
 load_widget("asset_selection", list(market_data.selected_assets.index))
 
-st.subheader("📥 Selección de activos locales")
+st.subheader("Selección de activos locales")
 
 selected_assets = st.multiselect(
     label="Selecciona los activos del modelo",
@@ -79,7 +79,7 @@ column_config = {
     "asset_name": st.column_config.TextColumn("Nombre")
 }
 
-st.subheader("📥 Importación de activos")
+st.subheader("Importación de activos")
 st.caption("Añade o edita los activos que deseas incluir en el análisis especificando su ticker y nombre (ej: AAPL - Apple).")
 
 asset_import_data_editor = st.data_editor(

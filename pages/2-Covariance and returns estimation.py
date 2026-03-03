@@ -22,7 +22,7 @@ first_page_load = set_page(page = 2)
 market_data = read_key('market_data', None)
 
 if market_data is None or not market_data.valid:
-    st.error(f"Assets must be defined first!")
+    st.error(f"¡Error! Debes definir los activos primero")
 
     delete_key('market_data')
     delete_key('returns_covariance_model')
