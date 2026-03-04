@@ -12,9 +12,12 @@ from pages.utils.portfolio_model_utils import *
 
 #BASIC STREAMLIT DEFINITION
 
+side_menu()
+
 st.set_page_config(
     page_title="Análisis de las carteras eficientes",
-    layout='wide'
+    layout='wide',
+    initial_sidebar_state="collapsed"
 )
 
 first_page_load = set_page(page = 2)

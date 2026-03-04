@@ -9,9 +9,12 @@ from pages.utils.market_data_utils import *
 
 #BASIC STREAMLIT DEFINITION
 
+side_menu()
+
 st.set_page_config(
     page_title="Selección de activos de modelo",
-    layout='wide'
+    layout='wide',
+    initial_sidebar_state="collapsed"
 )
 
 
@@ -200,8 +203,18 @@ pct_returns_fig.update_layout(
 
 st.plotly_chart(pct_returns_fig, width='stretch')
 
+# ---- BOTÓN INFERIOR ----
+bottom = st.container()
 
-
+with bottom:
+    col1, col2, col3 = st.columns([1,2,1])
+    
+    with col3:
+        st.page_link(
+            "pages/2-Covariance and returns estimation.py",
+            label="Estimación de retornos y covarianzas",
+            icon="🏠"
+        )
 
 # columna = market_data.returns_df.columns[0]
 

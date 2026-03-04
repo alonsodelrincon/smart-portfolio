@@ -7,7 +7,7 @@ DEFAULT_ASSETS_DB = {
     "V2": "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"
 }
 
-BASE_DIR = pathlib.Path(__file__).resolve().parent
+#BASE_DIR = pathlib.Path(__file__).resolve().parent
 
 def reset_session():
     for key in list(st.session_state.keys()):
@@ -33,6 +33,15 @@ def db_path():
 
     data_path = (DATA_DIR / st.session_state.db).resolve()
     return data_path
+
+def side_menu():
+    with st.sidebar:
+        st.page_link('app.py', label="inicio", icon = "🏠")
+        st.page_link('pages/1-Data selection.py', label="data", icon = "🏠")
+        st.page_link('pages/config_tab.py', label="configuration", icon = "⚙️")
+        st.page_link('pages/other.py', label="reset", icon = "⚙️")
+        st.page_link('pages/2-Covariance and returns estimation.py', label="cov", icon = "🏠")
+        st.page_link('pages/3-Efficient portfolio model.py', label="eff", icon = "🏠")
 
 def set_page(page):
     if 'recent_page' not in st.session_state:

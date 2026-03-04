@@ -1,6 +1,15 @@
 import streamlit as st
 from pages.utils.main_utils import *
 
+st.set_page_config(
+    page_title="Definición de fuentes de datos",
+    layout='wide',
+    initial_sidebar_state="collapsed"
+)
+
+side_menu()
+
+
 init_db()
 
 db_selector = st.selectbox(
@@ -11,5 +20,3 @@ db_selector = st.selectbox(
 )
 
 set_db(db_selector)
-
-st.set_page_config(layout="wide")
