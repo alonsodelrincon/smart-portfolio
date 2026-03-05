@@ -10,21 +10,13 @@ st.set_page_config(
 
 side_menu()
 
+first_page_load = set_page(page = 0)
+
 #CARGA DE TODA LA CONFIGURACION
 
-default_config = {
-    'db': list(DEFAULT_ASSETS_DB.keys())[0],
-    'return_estimation_method': ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE,
-    'return_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.ALL,
-    'return_bandwidth_value': None,
-    'return_lmb': None,
-    'covariance_estimation_method': ReturnsCovarianceModel.CovarianceMethod.SIMPLE,
-    'covariance_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB,
-    'covariance_bandwidth_value': None,
-    'efficient_frontier_n_steps': None
-}
+config = get_config()
 
-config = read_key('config', default_config)
+# st.write(config)
 
 load_widget('expected_return_estimation_method', config['return_estimation_method'])
 load_widget('expected_return_bandwidth_method', config['return_bandwidth_method'])
@@ -36,8 +28,6 @@ load_widget('covariance_bandidth_method', config['covariance_bandwidth_method'])
 load_widget('covariance_bandidth_value', config['covariance_bandwidth_value'])
 
 load_widget('efficient_frontier_n_steps', config['efficient_frontier_n_steps'])
-
-st.write(config)
 
 #CONFIGURACIÓN BASE DE DATOS
 
@@ -370,5 +360,8 @@ config = {
     'covariance_bandwidth_value': covariance_bandwidth_value,
     'efficient_frontier_n_steps': efficient_frontier_n_steps
 }
+
+if st.session_state.config != config:
+    reset_session()
 
 st.session_state.config = config
