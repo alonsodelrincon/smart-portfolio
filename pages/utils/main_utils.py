@@ -24,8 +24,6 @@ DEFAULT_CONFIG = {
 
 def get_config():
     if 'config' not in st.session_state:
-        st.write("not in")
-        st.write(st.session_state)
         st.session_state.config = DEFAULT_CONFIG
         
     return st.session_state.config
