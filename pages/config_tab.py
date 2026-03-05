@@ -5,7 +5,7 @@ from services.ReturnsCovarianceModel import ReturnsCovarianceModel
 st.set_page_config(
     page_title="Configuración",
     layout='wide',
-    initial_sidebar_state="collapsed"
+    #initial_sidebar_state="collapsed"
 )
 
 side_menu()

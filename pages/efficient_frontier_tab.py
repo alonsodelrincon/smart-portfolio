@@ -9,7 +9,7 @@ from pages.utils.efficient_frontier_utils import *
 st.set_page_config(
     page_title="Selección del portfolio",
     layout='wide',
-    initial_sidebar_state="collapsed"
+    #initial_sidebar_state="collapsed"
 )
 
 side_menu()
