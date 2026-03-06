@@ -17,7 +17,7 @@ st.set_page_config(
 
 side_menu()
 
-first_page_load = set_page(page = 1)
+first_page_load = set_page(page = 2)
 
 #CARGA DE TODA LA CONFIGURACION
 
@@ -37,6 +37,11 @@ market_data = st.session_state.market_data
 
 load_widget("asset_selection", list(market_data.selected_assets.index))
 
+
+# st.write("written")
+
+# st.write(st.session_state._asset_selection)
+
 st.subheader("Selección de activos locales")
 
 selected_assets = st.multiselect(
@@ -53,6 +58,7 @@ if set(selected_assets) != set(market_data.selected_assets.index):
 
     delete_key('dates_slider_selector')
     delete_key('returns_covariance_model')
+    delete_key('portfolio_model')
 
 if first_page_load:
     delete_key('asset_import')
@@ -90,6 +96,9 @@ if validate_import_df(market_data, asset_import_data_editor) and not equal_impor
     #ELIMINAMOS EL MODELO DE COVARIANZAS YA QUE MARKET DATA HA CAMBIADO
     delete_key('returns_covariance_model')
 
+    #ELIMINAMOS EL MODELO DE FRONTERA EFICIENTE YA QUE MARKET DATA HA CAMBIADO
+    delete_key('portfolio_model')
+
 #EN ESTE PUNTO VALIDAMOS EL NÚMERO DE ASSETS, SI EL ESTADO DE MARKET DATA NO ES VÁLIDO RESETEAMOS
 
 if not market_data.valid:
@@ -98,6 +107,8 @@ if not market_data.valid:
     delete_key('dates_slider_selector')
 
     delete_key('returns_covariance_model')
+    
+    delete_key('portfolio_model')
 
     st.stop()
 
@@ -126,6 +137,8 @@ if market_data.from_date != slider_from or market_data.to_date != slider_to:
     market_data.to_date = slider_to
 
     delete_key('returns_covariance_model')
+
+    delete_key('portfolio_model')
 
 st.session_state.market_data = market_data
 

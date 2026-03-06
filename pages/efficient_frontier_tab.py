@@ -14,7 +14,7 @@ st.set_page_config(
 
 side_menu()
 
-first_page_load = set_page(page = 1)
+first_page_load = set_page(page = 3)
 
 #CARGA DE TODA LA CONFIGURACION
 

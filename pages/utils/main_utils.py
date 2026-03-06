@@ -82,6 +82,7 @@ def db_path():
 
 def side_menu():
     with st.sidebar:
+        st.page_link('app.py', label="inicio", icon = "🏠")
         st.page_link('pages/config_tab.py', label="configuration", icon = "⚙️")
         st.page_link('pages/portfolio_selection_tab.py', label="portfolio selection", icon = "💹") #🧾 💹 📊
         st.page_link('pages/efficient_frontier_tab.py', label="efficient frontier", icon = "📊")
