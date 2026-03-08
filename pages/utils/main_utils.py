@@ -17,7 +17,7 @@ DEFAULT_CONFIG = {
     'covariance_estimation_method': ReturnsCovarianceModel.CovarianceMethod.SIMPLE,
     'covariance_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB,
     'covariance_bandwidth_value': None,
-    'efficient_frontier_n_steps': None
+    'efficient_frontier_n_steps': 20
 }
 
 #BASE_DIR = pathlib.Path(__file__).resolve().parent

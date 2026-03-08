@@ -302,3 +302,65 @@ with st.expander("Matriz de covarianzas"):
 
 
     
+    #market_data.returns_df.index
+    #market_data.returns_df[asset]
+
+# from numpy.lib.stride_tricks import sliding_window_view
+
+# result_std = []
+# result_mean = []
+
+# asset = market_data.returns_df.columns[0]
+# #for asset in market_data.returns_df.columns:
+# for i in range(2, len(market_data.returns_df)):
+#     #i = 20
+#     #st.write(market_data.returns_df)
+#     #st.write(market_data.returns_df[asset])
+
+#     ventanas = sliding_window_view(market_data.returns_df[asset], i)  # crea todas las ventanas
+
+#     #st.write(np.std(ventanas, axis=1))
+#     #st.write(np.mean(ventanas, axis=1))
+#     result_std.append(np.std(ventanas, axis=1))
+#     result_mean.append(np.mean(ventanas, axis=1))
+#     #result_std.append[np.std(ventanas, axis=1).values]
+#     #result_mean.append[np.mean(ventanas, axis=1).values]
+
+# result_std_df = np.concatenate(result_std, axis=1)
+# result_mean_df = np.concatenate(result_mean, axis=1)
+
+# st.write(result_std_df)
+# st.write(result_mean_df)
+
+# from collections import defaultdict
+
+# assets = market_data.returns_df.index
+
+# results = defaultdict
+
+# st.write(market_data.returns_df[asset])
+
+# l = len(market_data.returns_df)
+
+# for x in range(2, l, 100):
+#     st.write(x)
+#     for i, date in enumerate(market_data.returns_df.index):
+#         start = max(0, i - x//2)
+#         end = min(l, start + x)
+
+#         ventana = market_data.returns_df.iloc[start:end]
+
+#         # st.write(ventana)
+
+#         # st.write(np.std(ventana))
+#         # st.write(np.mean(ventana, axis=0))
+
+#         #st.write(i, x)
+
+#         std = np.std(ventana)
+#         mean = np.mean(ventana, axis=0)
+
+#         for asset in assets:
+#             results[asset] = [i, date, std[asset], mean[asset]]
+
+# st.write(results)
