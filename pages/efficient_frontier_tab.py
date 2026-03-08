@@ -142,6 +142,8 @@ loaded = load_key('portfolio_model', lambda: default_portfolio_model(returns_cov
 
 portfolio_model = st.session_state.portfolio_model
 
+st.write(get_config())
+
 if loaded:
     portfolio_model.calculate_efficient_frontier(n_steps = get_config()['efficient_frontier_n_steps'])
 
