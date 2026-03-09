@@ -173,26 +173,28 @@ class ReturnsCovarianceModel:
         eigvals = np.linalg.eigvals(self.covariance_matrix.values)
         return (eigvals >= 0).all()
 
-
     def _reset_correlation_matrix(self):
         self._correlation_matrix = None
 
-    #un parámetro que sea FORCE PSD que lo que haga sea que llame a una función. Esta funcióm compara los valores propios y si alguno es similar a cero con cierto
-    #epsilon lo establece a cero y reconstruye la matriz
+    def force_PSD(self, tolerance = 1e-5):
+        if self._covariance_matrix is not None:
+            sigma = self._covariance_matrix.values
+            eigvals, eigvec = np.linalg.eig(sigma)
 
-    def _adj_eigenvalues(self, matrix: pd.DataFrame, tolerance = 1e-5):
-        sigma = matrix.values
-        eigvals, eigvec = np.linalg.eig(sigma)
+            # Ajustar valores propios (clamping)
+            eigvals_adj = [x if abs(x) > tolerance else 0 for x in eigvals]
 
-        eigvals_adj = [x if abs(x) > tolerance else 0 for x in eigvals]
+            # Reconstruir matriz
+            sigma_adj = eigvec @ np.diag(eigvals_adj) @ eigvec.T
 
-        sigma_adj = eigvec @ np.diag(eigvals_adj) @ eigvec.T
+            # Crear nuevo DataFrame con mismos índices y columnas
+            matrix_adj = pd.DataFrame(
+                sigma_adj,
+                index=self._covariance_matrix.index,
+                columns=self._covariance_matrix.columns
+            )
 
-        matrix_adj = matrix.copy()
-
-        matrix_adj.values = sigma_adj
-
-        return matrix_adj
+            self._covariance_matrix = matrix_adj
 
     def estimate_covariance_matrix(self, covariance_method=CovarianceMethod.SIMPLE, bandwidth_method: BandwidthMethod | None = BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB, bandwidth_value: int | None = 10, weighting_method: WeightingMethod | None = WeightingMethod.CONSTANT, lmb: float | None = 0.5) -> pd.DataFrame:   
         if covariance_method == ReturnsCovarianceModel.CovarianceMethod.NEWEY_WEST and bandwidth_method is None:

@@ -9,9 +9,6 @@ class PortfolioOptimizerModel:
         self._ret_cov_model = returns_covariance_model
 
         self._min_variance_portfolio = None
-        self._max_variance_portfolio = None
-
-        self._min_return_portfolio = None
         self._max_return_portfolio = None
 
         self._efficient_frontier = None
@@ -59,54 +56,6 @@ class PortfolioOptimizerModel:
         self._min_variance_portfolio = Portfolio(self.returns_covariance_model, w.value)
 
         return self._min_variance_portfolio
-    
-    # @property
-    # def max_variance_portfolio(self) -> Portfolio.Portfolio:
-    #     if self._max_variance_portfolio is not None:
-    #         return self._max_variance_portfolio
-        
-    #     sigma = self.returns_covariance_model.covariance_matrix.values
-
-    #     variances = np.diag(sigma)
-
-    #     id_max = np.argmax(variances)
-    #     weights = np.zeros_like(variances)
-    #     weights[id_max] = 1.0
-        
-    #     self._max_variance_portfolio = Portfolio.Portfolio(self.returns_covariance_model, weights)
-
-    #     return self._max_variance_portfolio
-    
-    @property#NO IMPONGO QUE SEA POSITIVO
-    def max_variance_portfolio(self) -> Portfolio:
-        if self._max_variance_portfolio is not None:
-            return self._max_variance_portfolio
-
-        sigma = self.returns_covariance_model.covariance_matrix.values
-        _, eigvecs = np.linalg.eigh(sigma)
-
-        # autovector correspondiente al mayor autovalor
-        w_max = eigvecs[:, -1]
-        # normalizar para que sume 1
-        w_max = w_max / np.sum(w_max)
-
-        self._max_variance_portfolio = Portfolio(self.returns_covariance_model, w_max)
-        return self._max_variance_portfolio
-    
-    @property
-    def min_return_portfolio(self) -> Portfolio:
-        if self._min_return_portfolio is not None:
-            return self._min_return_portfolio
-        
-        returns = self.returns_covariance_model.expected_returns.values
-
-        id_max = np.argmin(returns)
-        weights = np.zeros_like(returns)
-        weights[id_max] = 1.0
-        
-        self._min_return_portfolio = Portfolio(self.returns_covariance_model, weights)
-
-        return self._min_return_portfolio
     
     @property
     def max_return_portfolio(self) -> Portfolio:
@@ -240,39 +189,6 @@ class PortfolioOptimizerModel:
         self._efficient_frontier = efficient_frontier
 
         return self._efficient_frontier
-
-
-    # def calculate_efficient_frontier(self, n_steps=20, verbose=False, annual_steps = True) -> list[Portfolio.Portfolio]:
-    #     if annual_steps:
-    #         min_risk = self.min_return_portfolio.annual_expected_return
-    #         max_return = self.max_return_portfolio.annual_expected_return
-    #     else:
-    #         min_return = self.min_return_portfolio.daily_expected_return
-    #         max_return = self.max_return_portfolio.daily_expected_return
-
-    #     if min_return == max_return:
-    #         raise ValueError(f"min_returns and max_returns are the same")
-
-    #     efficient_frontier = []
-
-    #     step = (max_return-min_return)/n_steps
-
-    #     for i in range(n_steps+1):
-    #         target_return = min_return + i*step
-
-    #         if annual_steps:
-    #             print(target_return)
-    #             portfolio = self.min_variance_portfolio_given_annual_return(annual_return=target_return, verbose=verbose)
-                
-    #             print(portfolio.annual_expected_return)
-    #         else:
-    #             portfolio = self.min_variance_portfolio_given_daily_return(daily_return=target_return, verbose=verbose)
-
-    #         efficient_frontier.append(portfolio)
-
-    #     self._efficient_frontier = efficient_frontier
-
-    #     return self._efficient_frontier
 
     def max_annual_sharpe_ratio_portfolio(self, annual_risk_free: float = 0.2) -> Portfolio:
         max_sharpe_porfolio = None

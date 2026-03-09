@@ -31,6 +31,14 @@ load_widget('efficient_frontier_n_steps', config['efficient_frontier_n_steps'])
 
 #CONFIGURACIÓN BASE DE DATOS
 
+st.header("Configuración de la base de datos")
+
+st.markdown(
+    """
+    La base de datos contendrá los activos locales que se podrán seleccionar para ejecutar el análisis.
+    """
+)
+
 db_selector = st.selectbox(
     label="Especifica la fuente de datos a usar",
     options= DEFAULT_ASSETS_DB.keys(),
@@ -43,15 +51,19 @@ st.divider()
 
 #CONFIGURACIÓN CÁLCULO RENTABILIDAD
 
+st.header("Configuración de los métodos de estimación")
+
 st.subheader("Rentabilidad esperada")
 
 selector, explanation = st.columns([4, 2])
 
 with selector:
+    valid_return_estimations = list(ReturnsCovarianceModel.ExpectedReturnEstimationMethod)
+    #valid_return_estimations.remove(ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SHRINKAGE)
+
     return_estimation_method = st.selectbox(
         "Método de estimación",
-        
-        options=list(ReturnsCovarianceModel.ExpectedReturnEstimationMethod),
+        options=list(valid_return_estimations),
         format_func=lambda x: x.value,
         key="_expected_return_estimation_method",
         on_change=write_widget,
@@ -230,7 +242,11 @@ with explanation:
 
                 donde $T$ es el número total de retornos de nuestra serie.
                 """)
-st.divider()
+
+st.write("")  # pequeño espacio
+st.write("")  # doble espacio
+st.write("")  # triple espacio si quieres más
+#st.divider()
 
 #CONFIGURACIÓN CALCULO MATRIZ DE COVARIANZA
 
@@ -337,7 +353,11 @@ with explanation:
                 donde $T$ es el número total de retornos de nuestra serie.
                 """)  
 
+st.divider()
+
 #CONFIGURACIÓN FRONTERA EFICIENTE
+
+st.header("Configuración del tamaño de la frontera eficiente")
 
 efficient_frontier_n_steps = st.number_input(
     "Número de carteras a calcular en la frontera eficiente",
@@ -365,3 +385,5 @@ if st.session_state.config != config:
     reset_session()
 
 st.session_state.config = config
+
+footer()

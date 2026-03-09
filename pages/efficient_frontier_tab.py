@@ -16,12 +16,6 @@ side_menu()
 
 first_page_load = set_page(page = 3)
 
-#CARGA DE TODA LA CONFIGURACION
-
-config = get_config()
-
-# st.write(config)
-
 #SPECIFIC GRAPHIC FUNCTIONS
 
 def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios = None, custom_portfolios = None):
@@ -162,8 +156,20 @@ n_portfolios = len(efficient_frontier)
 
 st.subheader("Frontera eficiente")
 
+st.markdown(
+    """
+    El gráfico que ves a continuación representa el **mínimo riesgo** que se puede obtener 
+    en una cartera compuesta por los activos seleccionados para cada valor de rentabilidad posible.
+    """
+)
+
+st.markdown(
+    """
+    Mueve el **selector** para ver qué cartera proporciona cada combinación de **rentabilidad / riesgo**.
+    """
+)
 efficient_frontier_selected_portfolio = st.slider(
-    label = "Selecciona la cartera sobre la frontera eficiente", 
+    label = "Cartera seleccionada", 
     min_value = 0, 
     max_value = n_portfolios-1, 
     step = 1,
@@ -259,3 +265,5 @@ col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
     plot_selected_portfolio(efficient_frontier[efficient_frontier_selected_portfolio])
+
+footer()

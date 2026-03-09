@@ -14,7 +14,7 @@ DEFAULT_CONFIG = {
     'return_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.ALL,
     'return_bandwidth_value': None,
     'return_lmb': None,
-    'covariance_estimation_method': ReturnsCovarianceModel.CovarianceMethod.SIMPLE,
+    'covariance_estimation_method': ReturnsCovarianceModel.CovarianceMethod.NEWEY_WEST,
     'covariance_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB,
     'covariance_bandwidth_value': None,
     'efficient_frontier_n_steps': 20
@@ -82,10 +82,28 @@ def db_path():
 
 def side_menu():
     with st.sidebar:
-        st.page_link('app.py', label="inicio", icon = "🏠")
-        st.page_link('pages/config_tab.py', label="configuration", icon = "⚙️")
-        st.page_link('pages/portfolio_selection_tab.py', label="portfolio selection", icon = "💹") #🧾 💹 📊
-        st.page_link('pages/efficient_frontier_tab.py', label="efficient frontier", icon = "📊")
+        st.page_link('app.py', label="Inicio", icon = "🏠")
+        st.page_link('pages/config_tab.py', label="Configuración", icon = "⚙️")
+        st.page_link('pages/portfolio_selection_tab.py', label="Selección de activos", icon = "💹") #🧾 💹 📊
+        st.page_link('pages/efficient_frontier_tab.py', label="Frontera eficiente", icon = "📊")
+
+def footer():
+    st.divider()
+
+    st.markdown("""
+    <div style="text-align:center; font-family:monospace; font-size:12px; color:gray;">
+        Creado por: Alonso del Rincón Loza 
+        <a href="https://www.linkedin.com/in/alonso-del-rincón-409600344" target="_blank" style="text-decoration:none;">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/linkedin.svg" width="24" style="margin-right:8px;">
+        </a>
+        <a href="https://github.com/alonsodelrincon" target="_blank" style="text-decoration:none;">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/github.svg" width="24">
+        </a>
+        <a href="https://alonsodelrincon.com/projects.html" target="_blank" style="text-decoration:none;">
+            <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/icons/globe.svg" width="24">
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 def set_page(page):
     if 'recent_page' not in st.session_state:
