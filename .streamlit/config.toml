@@ -1,2 +1,6 @@
 [client]
 showSidebarNavigation = false
+
+[assets_databases]
+V1 = "Fondos indexados y de gestión activa 24/01/2026"
+V2 = "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"

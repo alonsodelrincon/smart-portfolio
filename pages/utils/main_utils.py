@@ -1,12 +1,13 @@
 import streamlit as st
-import pathlib
 from config import DATA_DIR
+from config import DEFAULT_ASSETS_DB
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
 
-DEFAULT_ASSETS_DB = {
-    "V1": "Fondos indexados y de gestión activa 24/01/2026",
-    "V2": "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"
-}
+
+# DEFAULT_ASSETS_DB = {
+#     "V1": "Fondos indexados y de gestión activa 24/01/2026",
+#     "V2": "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"
+# }
 
 DEFAULT_CONFIG = {
     'db': list(DEFAULT_ASSETS_DB.keys())[0],
@@ -19,8 +20,6 @@ DEFAULT_CONFIG = {
     'covariance_bandwidth_value': None,
     'efficient_frontier_n_steps': 20
 }
-
-#BASE_DIR = pathlib.Path(__file__).resolve().parent
 
 def get_config():
     if 'config' not in st.session_state:

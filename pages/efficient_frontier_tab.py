@@ -7,7 +7,7 @@ from pages.utils.main_utils import *
 from pages.utils.efficient_frontier_utils import *
 
 st.set_page_config(
-    page_title="Selección del portfolio",
+    page_title="Frontera eficiente",
     layout='wide',
     #initial_sidebar_state="collapsed"
 )
@@ -79,17 +79,21 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
             )
         )
 
+    margin = 0.1
+    risk_range = max(portfolio_risks) - min(portfolio_risks)
+    return_range = max(portfolio_returns) - min(portfolio_returns)
+
     efficient_frontier_fig.update_layout(
         title="",
         xaxis=dict(
             title = "Riesgo anual",
-            #range=[min(portfolio_risks), max(portfolio_risks)],
-            #fixedrange=False  # True si quieres que no se pueda hacer zoom
+            range=[min(portfolio_risks) - risk_range*margin, max(portfolio_risks) + risk_range*margin],
+            fixedrange=False
         ),
         yaxis=dict(
             title = "Rentabilidad (%)",
-            #range=[min(portfolio_returns), max(portfolio_returns)],
-            #fixedrange=False  # True si quieres que no se pueda hacer zoom
+            range=[min(portfolio_returns) - return_range*margin, max(portfolio_returns) + return_range*margin],
+            fixedrange=False
         ),
         template="plotly_white"
     )
@@ -118,8 +122,8 @@ def plot_selected_portfolio(portfolio):
 
     pie_chart_fig.update_traces(
         textinfo='label+percent',
-        textposition='inside',           # fuerza los textos dentro de la porción
-        insidetextorientation='radial'   # gira los textos para que sigan el ángulo de la porción
+        textposition='inside',           # TEXTOS DENTRO DEL QUESITO
+        insidetextorientation='radial'
     )
 
     st.plotly_chart(pie_chart_fig, width="content")

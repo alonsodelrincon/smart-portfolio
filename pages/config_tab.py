@@ -96,7 +96,7 @@ with selector:
     return_lmb = None
     if return_estimation_method in (ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SHRINKAGE, ReturnsCovarianceModel.ExpectedReturnEstimationMethod.WHM_EWMA):
         return_lmb = st.slider(
-            "Selecciona $$\lambda$$ ", 
+            "Selecciona $$\\lambda$$ ", 
             min_value = 0.1, 
             max_value = 0.9, 
             step = 0.01,
@@ -118,7 +118,7 @@ with explanation:
             with st.expander("Método de estimación de rentabilidad: **Exponential Moving Average**", expanded=False):
                 st.markdown(
                     "Este método define la rentabilidad a del activo $i$ como "
-                    "$$\\hat{\\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$."
+                    "$$\\hat{\\mu}_i = (1-\\lambda) \sum_{t=0}^{T} \\lambda^{T-t} R_{i,t}$$."
                 )
         elif return_estimation_method == ReturnsCovarianceModel.ExpectedReturnEstimationMethod.WHM_BARLETT:
             with st.expander("Método de estimación de rentabilidad: **Barlett Kernel**", expanded=False):
@@ -200,7 +200,7 @@ with explanation:
             with st.expander("Método de estimación de rentabilidad: **Estimador de media con shrinkage**", expanded=False):
                 st.markdown(
                     "Con shrinkage, la rentabilidad esperada se calcula combinando la media histórica de cada activo "
-                    "con la media global de todos los activos, ponderados por un factor $\lambda$: "
+                    "con la media global de todos los activos, ponderados por un factor $\\lambda$: "
                 )
 
                 st.markdown(r"""
@@ -296,7 +296,7 @@ with explanation:
             with st.expander("Método de estimación de la covarianza: **Simple**", expanded=True):
 
                 st.markdown(
-                    "Este método considera la matriz de covarianzas $$\Sigma$$ tal que"
+                    "Este método considera la matriz de covarianzas $$\\Sigma$$ tal que"
                 )
 
                 st.latex(r"\Sigma_{i,j} = Cov(R_i, R_j).")
@@ -320,7 +320,7 @@ with explanation:
 
                 st.markdown(
                     """
-                    y $$\Sigma_{t}$$ es la matriz de covarianzas entre los retornos actuales 
+                    y $$\\Sigma_{t}$$ es la matriz de covarianzas entre los retornos actuales 
                     y los retornos desplazados $$t$$ periodos.
                     """
                 )
