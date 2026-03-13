@@ -317,4 +317,11 @@ Hay dos carteras a destacar en la frontera eficiente. Estas son:
   Es la cartera que máx rentabilidad ofrece. Siempre corresponde con la cartera compuesta en un 100% del activo de más rentabilidad.
 """)
 
+st.markdown("### 🔗 Más detalles del proyecto")
+st.markdown(
+    "Si quieres ver más información o código del proyecto completo, "
+    "entra en el siguiente repositorio de GitHub: "
+    "[Proyecto Completo](https://github.com/alonsodelrincon/smart-portfolio)"
+)
+
 footer()
