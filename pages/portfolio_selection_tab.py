@@ -27,11 +27,6 @@ market_data = st.session_state.market_data
 
 load_widget("asset_selection", list(market_data.selected_assets.index))
 
-
-# st.write("written")
-
-# st.write(st.session_state._asset_selection)
-
 st.subheader("Selección de activos locales")
 
 selected_assets = st.multiselect(
@@ -42,6 +37,7 @@ selected_assets = st.multiselect(
     on_change= write_widget,
     args=["asset_selection"]
 )
+
 
 if set(selected_assets) != set(market_data.selected_assets.index):
     market_data.select_assets(assets=selected_assets)

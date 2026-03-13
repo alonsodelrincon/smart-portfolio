@@ -7,7 +7,7 @@ from pathlib import Path
 class MarketData_V2:
     def __init__(self, local_dir: Path):
         self._local_dir = local_dir
-        #self._local_assets_metadata = local_asset_metadata.copy()
+        
         self._local_assets_metadata = pd.read_excel(local_dir / 'asset_universe.xlsx', index_col='asset')
 
         self._validate_local_metadata()

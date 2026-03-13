@@ -2,7 +2,6 @@ from services.ReturnsCovarianceModel import ReturnsCovarianceModel
 from services.Portfolio import Portfolio
 import cvxpy as cp
 import numpy as np
-from typing import Tuple
 
 class PortfolioOptimizerModel:
     def __init__(self, returns_covariance_model: ReturnsCovarianceModel):

@@ -3,7 +3,6 @@ import pandas as pd
 from services.MarketData_V2 import MarketData_V2
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
 
-from pathlib import Path
 from pages.utils.main_utils import *
 
 def default_market_data():

@@ -4,11 +4,6 @@ from config import DEFAULT_ASSETS_DB
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
 
 
-# DEFAULT_ASSETS_DB = {
-#     "V1": "Fondos indexados y de gestión activa 24/01/2026",
-#     "V2": "MSCI WORLD + SP500 + EMERGING MARKETS + AZVALOR + HAMCO 24/01/2026"
-# }
-
 DEFAULT_CONFIG = {
     'db': list(DEFAULT_ASSETS_DB.keys())[0],
     'return_estimation_method': ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE,
@@ -49,10 +44,6 @@ def reset_session(exceptions = True):
         "recent_page"
     ]
 
-    # st.write("present", list(st.session_state.keys()))
-    # st.write("exceptions", exceptions)
-    # st.write("deleted", list(st.session_state.keys() - set(exceptions)))
-
     if exceptions:
         delete_list = list(st.session_state.keys() - set(exceptions_list))
     else:
@@ -60,20 +51,6 @@ def reset_session(exceptions = True):
 
     for key in delete_list:
         del st.session_state[key]
-
-# def init_db():
-#     if 'db' not in st.session_state:
-#         reset_session()
-#         db = list(DEFAULT_ASSETS_DB.keys())[0]
-#         st.session_state.db = db
-
-# def set_db(db: str):
-#     if db not in DEFAULT_ASSETS_DB:
-#         raise ValueError(f"{db} no es una DB válida")
-
-#     if st.session_state.db != db:
-#         reset_session()
-#         st.session_state.db = db
 
 def db_path():
     data_path = (DATA_DIR / get_config()['db']).resolve()

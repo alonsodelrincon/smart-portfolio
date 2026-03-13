@@ -152,7 +152,7 @@ class ReturnsCovarianceModel:
                     raise ValueError(f"ExpectedReturnEstimationMethod method not implemented")
                 
                 w = w/np.sum(w)
-                w = w[::-1] #nuestros pesos están en orden inverso a nuestros registros
+                w = w[::-1] #LOS PESOS ESTÁN EN ORDEN INVERSO A LOS DATOS
 
                 prod = self._market_data.returns_df[-L:].mul(w, axis = 0)
 
@@ -168,6 +168,7 @@ class ReturnsCovarianceModel:
 
         return self.estimate_covariance_matrix()
     
+    #ESTA FUNCIÓN DEVUELVE SI LA MATRIZ DE COVARIANZAS ES PSD, ESTO ES, SEMIDEFINIDA POSITIVA
     @property
     def PSD(self):
         eigvals = np.linalg.eigvals(self.covariance_matrix.values)
@@ -176,18 +177,19 @@ class ReturnsCovarianceModel:
     def _reset_correlation_matrix(self):
         self._correlation_matrix = None
 
+    #ESTA FUNCIÓN FUERZA NUESTRA MATRIZ DE COVARIANZAS A SER PSD (SEMIDEFINIDA POSITIVA) SIEMPRE Y CUANDO SUS VALORES PROPIOS ESTÉN DENTRO DE UN RANGO DE TOLERANCIA
     def force_PSD(self, tolerance = 1e-5):
         if self._covariance_matrix is not None:
             sigma = self._covariance_matrix.values
             eigvals, eigvec = np.linalg.eig(sigma)
 
-            # Ajustar valores propios (clamping)
+            # CLAMPEAMOS VALORES PROPIOS
             eigvals_adj = [x if abs(x) > tolerance else 0 for x in eigvals]
 
-            # Reconstruir matriz
+            # RECONSTRUIMOS LA MATRIZ A PARTIR DE LOS NUEVOS VALORES PROPIOS Y LOS VECTORES PROPIOS
             sigma_adj = eigvec @ np.diag(eigvals_adj) @ eigvec.T
 
-            # Crear nuevo DataFrame con mismos índices y columnas
+            # CONSTRUIMOS LA NUEVA MATRIZ ASOCIADA
             matrix_adj = pd.DataFrame(
                 sigma_adj,
                 index=self._covariance_matrix.index,

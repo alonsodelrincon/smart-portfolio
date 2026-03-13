@@ -16,8 +16,6 @@ first_page_load = set_page(page = 1)
 
 config = get_config()
 
-# st.write(config)
-
 load_widget('expected_return_estimation_method', config['return_estimation_method'])
 load_widget('expected_return_bandwidth_method', config['return_bandwidth_method'])
 load_widget('expected_return_bandwidth_value', config['return_bandwidth_value'])
@@ -43,7 +41,6 @@ db_selector = st.selectbox(
     label="Especifica la fuente de datos a usar",
     options= DEFAULT_ASSETS_DB.keys(),
     index = list(DEFAULT_ASSETS_DB.keys()).index(config['db']),
-    #index = list(DEFAULT_ASSETS_DB.keys()).index(st.session_state.db),
     format_func=lambda x: DEFAULT_ASSETS_DB[x]
 )
 
@@ -243,10 +240,9 @@ with explanation:
                 donde $T$ es el número total de retornos de nuestra serie.
                 """)
 
-st.write("")  # pequeño espacio
-st.write("")  # doble espacio
-st.write("")  # triple espacio si quieres más
-#st.divider()
+st.write("")
+st.write("")
+st.write("")
 
 #CONFIGURACIÓN CALCULO MATRIZ DE COVARIANZA
 
