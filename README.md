@@ -15,14 +15,14 @@ The interface is organized into four main sections:
 🏠 **Home**
 General introduction to the project and theoretical background of the efficient frontier model.
 
-⚙️ **Configuration**
-Allows users to configure the parameters used in the analysis, including the asset database and the statistical methods used to estimate expected returns and covariance matrices.
-
 💹 **Asset Selection**
 Users can select assets from a predefined local database or import new assets by specifying their ticker. The interface also allows users to define the time range for the analysis and visualize correlation matrices and expected returns.
 
 📊 **Efficient Frontier**
 Displays the efficient frontier computed from the selected assets. Users can interactively explore optimal portfolios and compare them with custom portfolios.
+
+⚙️ **Configuration**
+Allows users to configure the parameters used in the analysis, including the asset database and the statistical methods used to estimate expected returns and covariance matrices.
 
 ---
 

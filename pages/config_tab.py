@@ -1,6 +1,11 @@
 import streamlit as st
 from pages.utils.main_utils import *
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from pages.utils.translations import translations_config
+
+config = get_config()
+
+set_page_translations(translations_config, lang=config['lang'])
 
 st.set_page_config(
     page_title="Configuración",
@@ -367,6 +372,7 @@ efficient_frontier_n_steps = st.number_input(
 
 config = {
     'db': db_selector,
+    'lang': 'es',
     'return_estimation_method': return_estimation_method,
     'return_bandwidth_method': return_bandwidth_method,
     'return_bandwidth_value': return_bandwidth_value,

@@ -2,10 +2,16 @@ import streamlit as st
 from config import DATA_DIR
 from config import DEFAULT_ASSETS_DB
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from pages.utils.translations import translations_general
 
+LANGUAGES = {
+    'en': 'English',
+    'es': 'Español'
+}
 
 DEFAULT_CONFIG = {
     'db': list(DEFAULT_ASSETS_DB.keys())[0],
+    'lang': list(LANGUAGES.keys())[0],
     'return_estimation_method': ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE,
     'return_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.ALL,
     'return_bandwidth_value': None,
@@ -15,6 +21,8 @@ DEFAULT_CONFIG = {
     'covariance_bandwidth_value': None,
     'efficient_frontier_n_steps': 20
 }
+
+
 
 def get_config():
     if 'config' not in st.session_state:
@@ -41,7 +49,8 @@ def reset_session(exceptions = True):
         "_covariance_bandidth_value",
         "_efficient_frontier_n_steps",
         "config",
-        "recent_page"
+        "recent_page",
+        "lang"
     ]
 
     if exceptions:
@@ -55,13 +64,6 @@ def reset_session(exceptions = True):
 def db_path():
     data_path = (DATA_DIR / get_config()['db']).resolve()
     return data_path
-
-def side_menu():
-    with st.sidebar:
-        st.page_link('app.py', label="Inicio", icon = "🏠")
-        st.page_link('pages/config_tab.py', label="Configuración", icon = "⚙️")
-        st.page_link('pages/portfolio_selection_tab.py', label="Selección de activos", icon = "💹") #🧾 💹 📊
-        st.page_link('pages/efficient_frontier_tab.py', label="Frontera eficiente", icon = "📊")
 
 def footer():
     st.divider()
@@ -135,3 +137,25 @@ def delete_key(key):
         return True
     
     return False
+
+def set_page_translations(translations_dict, lang="es"):
+    st.session_state['_translations_dict'] = translations_dict
+    st.session_state['_translations_lang'] = lang
+
+def tr(key: str) -> str:
+    translations_dict = st.session_state.get('_translations_dict', {})
+    lang = st.session_state.get('_translations_lang', "es")
+    return translations_dict.get(lang, {}).get(key, key)
+
+def side_menu():
+    navbar_tr = translations_general[get_config()['lang']]
+
+    with st.sidebar:
+        #st.page_link('app.py', label="Inicio", icon = "🏠")
+        st.page_link('app.py', label=navbar_tr["home_navbar"], icon = "🏠")
+        #st.page_link('pages/portfolio_selection_tab.py', label="Selección de activos", icon = "💹") #🧾 💹 📊
+        st.page_link('pages/portfolio_selection_tab_translated.py', label=navbar_tr["asset_selection_navbar"], icon = "💹")
+        #st.page_link('pages/efficient_frontier_tab.py', label="Frontera eficiente", icon = "📊")
+        st.page_link('pages/efficient_frontier_tab_translated.py', label=navbar_tr["efficient_frontier_navbar"], icon = "📊")
+        #st.page_link('pages/config_tab.py', label="Configuración", icon = "⚙️")
+        st.page_link('pages/config_tab_translated.py', label=navbar_tr["config_navbar"], icon = "⚙️")
