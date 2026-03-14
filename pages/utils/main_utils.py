@@ -2,7 +2,7 @@ import streamlit as st
 from config import DATA_DIR
 from config import DEFAULT_ASSETS_DB
 from services.ReturnsCovarianceModel import ReturnsCovarianceModel
-from pages.utils.translations import translations_general
+from .translations import translations_general
 
 LANGUAGES = {
     'en': 'English',
