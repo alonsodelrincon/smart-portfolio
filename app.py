@@ -112,26 +112,6 @@ x_minrisk, y_minrisk = 0.18542816014731894, 0.16522076997580526
 # Punto 3: Igual riesgo y máxima rentabilidad
 x_maxret, y_maxret = 0.19626173871483563, 0.1693074192281241
 
-efficient_frontier_fig.add_trace(
-    go.Scatter(
-        x=[x_minrisk],
-        y=[y_gen],
-        mode='markers',
-        marker=dict(size=10, color='red'),
-        name = tr("equal_return_min_risk"),
-    )
-)
-
-efficient_frontier_fig.add_trace(
-    go.Scatter(
-        x=[x_gen],
-        y=[y_maxret],
-        mode='markers',
-        marker=dict(size=10, color='red'),
-        name = tr("equal_risk_max_return"),
-    )
-)
-
 # Línea horizontal: misma rentabilidad
 efficient_frontier_fig.add_trace(
     go.Scatter(
@@ -151,6 +131,26 @@ efficient_frontier_fig.add_trace(
         mode='lines',
         line=dict(color='red', dash='dash'),
         showlegend=False
+    )
+)
+
+efficient_frontier_fig.add_trace(
+    go.Scatter(
+        x=[x_minrisk],
+        y=[y_gen],
+        mode='markers',
+        marker=dict(size=10, color="darkred"),
+        name = tr("equal_return_min_risk"),
+    )
+)
+
+efficient_frontier_fig.add_trace(
+    go.Scatter(
+        x=[x_gen],
+        y=[y_maxret],
+        mode='markers',
+        marker=dict(size=10, color='red'),
+        name = tr("equal_risk_max_return"),
     )
 )
 
