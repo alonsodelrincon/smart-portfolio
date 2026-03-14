@@ -70,7 +70,7 @@ def footer():
 
     st.markdown("""
     <div style="text-align:center; font-family:monospace; font-size:12px; color:gray;">
-        Creado por: Alonso del Rincón Loza 
+        Created by: Alonso del Rincón Loza 
         <a href="https://www.linkedin.com/in/alonso-del-rincón-409600344" target="_blank" style="text-decoration:none;">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/linkedin.svg" width="24" style="margin-right:8px;">
         </a>
