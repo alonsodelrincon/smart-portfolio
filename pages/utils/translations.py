@@ -401,7 +401,7 @@ translations_config = {
         - $\bar{\mu}$ es la media de la rentabilidad de todos los activos  
         - $\lambda \in [0,1]$ es el factor de shrinkage
         """,
-        "expander_newey_west_bandwidth": "### Selección del número óptimo de observaciones: **Newey–West**",
+        "expander_newey_west_bandwidth": "Selección del número óptimo de observaciones: **Newey–West**",
         "expander_newey_west_bandwidth_text": r"""
         El bandwidth se calcula como:
 
@@ -411,7 +411,7 @@ translations_config = {
 
         donde $T$ es el número total de retornos de nuestra serie.
         """,
-        "expander_andrews_plugin_bandwidth": "### Selección del número óptimo de observaciones: **Regla de Andrews**",
+        "expander_andrews_plugin_bandwidth": "Selección del número óptimo de observaciones: **Regla de Andrews**",
         "expander_andrews_plugin_bandwidth_text": r"""
         El bandwidth se calcula como:
 
@@ -451,7 +451,7 @@ translations_config = {
         y $$\Sigma_{t}$$ es la matriz de covarianzas entre los retornos actuales 
         y los retornos desplazados $$t$$ periodos.
         """,
-        "expander_newey_west_lags": "### Selección del número óptimo de retardos: **Newey–West**",
+        "expander_newey_west_lags": "Selección del número óptimo de retardos: **Newey–West**",
         "expander_newey_west_lags_text": r"""
         El número de retardos usados se calcula como:
 
@@ -461,7 +461,7 @@ translations_config = {
 
         donde $T$ es el número total de retornos de nuestra serie.
         """,
-        "expander_andrews_plugin_lags": "### Selección del número óptimo de retardos: **Regla de Andrews**",
+        "expander_andrews_plugin_lags": "Selección del número óptimo de retardos: **Regla de Andrews**",
         "expander_andrews_plugin_lags_text": r"""
         El número de retardos usados se calcula como:
 
@@ -587,7 +587,7 @@ translations_config = {
         - $\bar{\mu}$ is the mean return of all assets  
         - $\lambda \in [0,1]$ is the shrinkage factor
         """,
-        "expander_newey_west_bandwidth": "### Optimal Number of Observations Selection: **Newey–West**",
+        "expander_newey_west_bandwidth": "Optimal Number of Observations Selection: **Newey–West**",
         "expander_newey_west_bandwidth_text": r"""
         The bandwidth is calculated as:
 
@@ -597,7 +597,7 @@ translations_config = {
 
         where $T$ is the total number of returns in the series.
         """,
-        "expander_andrews_plugin_bandwidth": "### Optimal Number of Observations Selection: **Andrews Rule**",
+        "expander_andrews_plugin_bandwidth": "Optimal Number of Observations Selection: **Andrews Rule**",
         "expander_andrews_plugin_bandwidth_text": r"""
         The bandwidth is calculated as:
 
@@ -637,7 +637,7 @@ translations_config = {
         and $$\Sigma_{t}$$ is the covariance matrix between current returns
         and returns lagged by $$t$$ periods.
         """,
-        "expander_newey_west_lags": "### Optimal Number of Lags Selection: **Newey–West**",
+        "expander_newey_west_lags": "Optimal Number of Lags Selection: **Newey–West**",
         "expander_newey_west_lags_text": r"""
         The number of lags used is calculated as:
 
@@ -647,7 +647,7 @@ translations_config = {
 
         where $T$ is the total number of returns in the series.
         """,
-        "expander_andrews_plugin_lags": "### Optimal Number of Lags Selection: **Andrews Rule**",
+        "expander_andrews_plugin_lags": "Optimal Number of Lags Selection: **Andrews Rule**",
         "expander_andrews_plugin_lags_text": r"""
         The number of lags used is calculated as:
 
