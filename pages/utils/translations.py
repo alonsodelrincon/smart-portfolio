@@ -305,14 +305,18 @@ translations_config = {
         "slider_lambda": "Selecciona $$\\lambda$$",
         "expander_simple": "Método de estimación de rentabilidad: **Simple**",
         "expander_simple_text": r"""
-Este método define la rentabilidad esperada del activo $i$ como
-$$\hat{\mu}_i = \frac{1}{T} \sum_{t=0}^{T} R_{i,t}$$.
-""",
+        Este método define la rentabilidad esperada del activo $i$ como
+        $$
+        \hat{\mu}_i = \frac{1}{T} \sum_{t=0}^{T} R_{i,t}.
+        $$
+        """,
         "expander_ewma": "Método de estimación de rentabilidad: **Exponential Moving Average**",
         "expander_ewma_text": r"""
-Este método define la rentabilidad del activo $i$ como
-$$\hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$.
-""",
+        Este método define la rentabilidad del activo $i$ como
+        $$
+        \hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}.
+        $$
+        """,
         "expander_barlett": "Método de estimación de rentabilidad: **Barlett Kernel**",
         "expander_barlett_text": r"""
         Este método define la rentabilidad del activo $i$ como
@@ -468,13 +472,7 @@ $$\hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$.
         donde $T$ es el número total de retornos de nuestra serie.
         """,
         "header_efficient_frontier": "Configuración del tamaño de la frontera eficiente",
-        "input_efficient_n_steps": "Número de carteras a calcular en la frontera eficiente",
-        "efficient_model": "🛠️ ¿Cómo funciona el modelo de la frontera eficiente?",
-        "efficient_model_text": r"""
-        La frontera eficiente parte del cálculo de la matriz de covarianzas asociada a nuestros activos $\Sigma$ así como del vector de rentabilidad esperada $\mu$.
-
-        Para una lista de $n$ activos disponibles $(a_1, a_2, \dots, a_n)$, una cartera queda definida por la proporción de cada activo en ella. Más formalmente, cada cartera será representada por un vector de probabilidades:
-        """
+        "input_efficient_n_steps": "Número de carteras a calcular en la frontera eficiente"
     },
     "en": {
         "page_title": "Settings",
@@ -493,12 +491,16 @@ $$\hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$.
         "expander_simple": "Expected Return Estimation Method: **Simple**",
         "expander_simple_text": r"""
         This method defines the expected return of asset $i$ as
-        $$\hat{\mu}_i = \frac{1}{T} \sum_{t=0}^{T} R_{i,t}$$.
+        $$
+        \hat{\mu}_i = \frac{1}{T} \sum_{t=0}^{T} R_{i,t}.
+        $$
         """,
         "expander_ewma": "Expected Return Estimation Method: **Exponential Moving Average**",
         "expander_ewma_text": r"""
         This method defines the return of asset $i$ as
-        $$\hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$.
+        $$
+        \hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}.
+        $$
         """,
         "expander_barlett": "Expected Return Estimation Method: **Barlett Kernel**",
         "expander_barlett_text": r"""
@@ -656,13 +658,7 @@ $$\hat{\mu}_i = (1-\lambda) \sum_{t=0}^{T} \lambda^{T-t} R_{i,t}$$.
         where $T$ is the total number of returns in the series.
         """,
         "header_efficient_frontier": "Efficient Frontier Size Configuration",
-        "input_efficient_n_steps": "Number of portfolios to calculate on the efficient frontier",
-        "efficient_model": "🛠️ How does the efficient frontier model work?",
-        "efficient_model_text": r"""
-        The efficient frontier starts from the calculation of the covariance matrix associated with our assets $\Sigma$ and the expected return vector $\mu$.
-
-        For a list of $n$ available assets $(a_1, a_2, \dots, a_n)$, a portfolio is defined by the proportion of each asset in it. More formally, each portfolio is represented by a probability vector:
-        """
+        "input_efficient_n_steps": "Number of portfolios to calculate on the efficient frontier"
     }
 }
 
