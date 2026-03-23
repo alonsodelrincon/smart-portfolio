@@ -1,4 +1,4 @@
-from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from services.SimpleReturnsCovarianceModel import ReturnsCovarianceModel
 import numpy as np
 
 class Portfolio:

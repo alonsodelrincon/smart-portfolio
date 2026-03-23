@@ -1,7 +1,7 @@
 import streamlit as st
 from config import DATA_DIR
 from config import DEFAULT_ASSETS_DB
-from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from services.SimpleReturnsCovarianceModel import SimpleReturnsCovarianceModel
 from .translations import translations_general
 
 LANGUAGES = {
@@ -12,17 +12,18 @@ LANGUAGES = {
 DEFAULT_CONFIG = {
     'db': list(DEFAULT_ASSETS_DB.keys())[0],
     'lang': list(LANGUAGES.keys())[0],
-    'return_estimation_method': ReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE,
-    'return_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.ALL,
+    'return_estimation_method': SimpleReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE,
+    'return_bandwidth_method': SimpleReturnsCovarianceModel.BandwidthMethod.ALL,
     'return_bandwidth_value': None,
     'return_lmb': None,
-    'covariance_estimation_method': ReturnsCovarianceModel.CovarianceMethod.NEWEY_WEST,
-    'covariance_bandwidth_method': ReturnsCovarianceModel.BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB,
+    'covariance_estimation_method': SimpleReturnsCovarianceModel.CovarianceMethod.NEWEY_WEST,
+    'covariance_bandwidth_method': SimpleReturnsCovarianceModel.BandwidthMethod.NEWEY_WEST_RULE_OF_THUMB,
     'covariance_bandwidth_value': None,
-    'efficient_frontier_n_steps': 20
+    'efficient_frontier_n_steps': 20,
+    'active_bootstrap': False,
+    'bootstrap_sample_size': None,
+    'bootstrap_block_size': None
 }
-
-
 
 def get_config():
     if 'config' not in st.session_state:
@@ -40,6 +41,9 @@ def reset_session(exceptions = True):
         "covariance_bandidth_method",
         "covariance_bandidth_value",
         "efficient_frontier_n_steps",
+        'active_bootstrap',
+        'bootstrap_sample_size',
+        'bootstrap_block_size',
         "_expected_return_estimation_method",
         "_expected_return_bandwidth_method",
         "_expected_return_bandwidth_value",
@@ -48,6 +52,9 @@ def reset_session(exceptions = True):
         "_covariance_bandidth_method",
         "_covariance_bandidth_value",
         "_efficient_frontier_n_steps",
+        '_active_bootstrap',
+        '_bootstrap_sample_size',
+        '_bootstrap_block_size',
         "config",
         "recent_page",
         "lang"
@@ -151,11 +158,8 @@ def side_menu():
     navbar_tr = translations_general[get_config()['lang']]
 
     with st.sidebar:
-        #st.page_link('app.py', label="Inicio", icon = "🏠")
         st.page_link('app.py', label=navbar_tr["home_navbar"], icon = "🏠")
-        #st.page_link('pages/portfolio_selection_tab.py', label="Selección de activos", icon = "💹") #🧾 💹 📊
-        st.page_link('pages/portfolio_selection_tab_translated.py', label=navbar_tr["asset_selection_navbar"], icon = "💹")
-        #st.page_link('pages/efficient_frontier_tab.py', label="Frontera eficiente", icon = "📊")
-        st.page_link('pages/efficient_frontier_tab_translated.py', label=navbar_tr["efficient_frontier_navbar"], icon = "📊")
-        #st.page_link('pages/config_tab.py', label="Configuración", icon = "⚙️")
-        st.page_link('pages/config_tab_translated.py', label=navbar_tr["config_navbar"], icon = "⚙️")
+        st.page_link('pages/portfolio_selection.py', label=navbar_tr["asset_selection_navbar"], icon = "💹")
+        st.page_link('pages/efficient_frontier.py', label=navbar_tr["efficient_frontier_navbar"], icon = "📊")
+        st.page_link('pages/config_tab.py', label=navbar_tr["config_navbar"], icon = "⚙️")
+        

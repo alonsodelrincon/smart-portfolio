@@ -1,4 +1,4 @@
-from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from services.SimpleReturnsCovarianceModel import ReturnsCovarianceModel
 from services.Portfolio import Portfolio
 import cvxpy as cp
 import numpy as np
@@ -20,15 +20,24 @@ class PortfolioOptimizerModel:
     @property
     def returns_covariance_model(self):
         return self._ret_cov_model
-        
+
+    #############################################################
+    #               FUNCIONES FORWARDING                        #
+    #############################################################
+
     @property
     def n_assets(self):
         return self.returns_covariance_model.n_assets
     
-    
     @property
     def assets(self):
         return self.returns_covariance_model.assets
+    
+    @property
+    def returns_len(self):
+        return self.returns_covariance_model.returns_len
+    
+    #############################################################
     
     @property
     def min_variance_portfolio(self, verbose : bool = False) -> Portfolio:
@@ -153,10 +162,6 @@ class PortfolioOptimizerModel:
         self._individual_portfolios = individual_portfolios
 
         return self._individual_portfolios
-
-    def custom_portfolio(self, w: np.array, name: str = None) -> Portfolio:
-        return Portfolio(self.returns_covariance_model, w, name)
-
 
     def calculate_efficient_frontier(self, n_steps=20, verbose=False) -> list[Portfolio]:
         min_var_portfolio = self.min_variance_portfolio

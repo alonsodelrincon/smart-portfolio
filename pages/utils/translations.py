@@ -260,7 +260,9 @@ translations_portfolio_selection = {
         "plot_expected_returns_x": "Activos",
         "plot_expected_returns_y": "Rentabilidad (%)",
         "expander_covariance_matrix": "Matriz de covarianzas",
-        "plot_covariance_matrix_title": "Matriz de Covarianzas diarias"
+        "plot_covariance_matrix_title": "Matriz de Covarianzas diarias",
+        "simple_estimates": "Estimaciones con datos reales",
+        "bootstrap_estimates": "Estimaciones basadas en bootstrap"
     },
     "en": {
         "page_title": "Portfolio Selection",
@@ -284,7 +286,9 @@ translations_portfolio_selection = {
         "plot_expected_returns_x": "Assets",
         "plot_expected_returns_y": "Return (%)",
         "expander_covariance_matrix": "Covariance matrix",
-        "plot_covariance_matrix_title": "Daily covariance matrix"
+        "plot_covariance_matrix_title": "Daily covariance matrix",
+        "simple_estimates": "Real-data estimates",
+        "bootstrap_estimates": "Bootstrap-based estimates"
     }
 }
 
@@ -472,7 +476,11 @@ translations_config = {
         donde $T$ es el número total de retornos de nuestra serie.
         """,
         "header_efficient_frontier": "Configuración del tamaño de la frontera eficiente",
-        "input_efficient_n_steps": "Número de carteras a calcular en la frontera eficiente"
+        "input_efficient_n_steps": "Número de carteras a calcular en la frontera eficiente",
+        "bootstrap_config": "Configuración de Bootstrap",
+        "apply_bootstrapping": "Aplicar bootstrap",
+        "sample_size": "Número de remuestreos",
+        "block_size": "Tamaño de bloque"
     },
     "en": {
         "page_title": "Settings",
@@ -658,7 +666,11 @@ translations_config = {
         where $T$ is the total number of returns in the series.
         """,
         "header_efficient_frontier": "Efficient Frontier Size Configuration",
-        "input_efficient_n_steps": "Number of portfolios to calculate on the efficient frontier"
+        "input_efficient_n_steps": "Number of portfolios to calculate on the efficient frontier",
+        "bootstrap_config": "Bootstrap Configuration",
+        "apply_bootstrapping": "Apply Bootstrap",
+        "sample_size": "Number of resamples",
+        "block_size": "Block size"
     }
 }
 
@@ -691,7 +703,10 @@ translations_efficient_frontier = {
         "xaxis_risk": "Riesgo anual",
         "yaxis_return": "Rentabilidad (%)",
         "custom_portfolio_column_name": "Nombre",
-        "error_assets_not_defined": "¡Error! Debes definir los activos primero"
+        "error_assets_not_defined": "¡Error! Debes definir los activos primero",
+        "subheader_selected_bootstrap_portfolio": "Cartera seleccionada (bootstrap)",
+        "trace_frontier_bootstrap": "Frontera eficiente (bootstrap)",
+        "trace_selected_portfolio_bootstrap":  "Cartera seleccionada (bootstrap)"
     },
     "en": {
         "page_title": "Efficient Frontier",
@@ -721,7 +736,10 @@ translations_efficient_frontier = {
         "xaxis_risk": "Annual Risk",
         "yaxis_return": "Return (%)",
         "custom_portfolio_column_name": "Name",
-        "error_assets_not_defined": "Error! You must define the assets first"
+        "error_assets_not_defined": "Error! You must define the assets first",
+        "subheader_selected_bootstrap_portfolio": "Selected portfolio (bootstrap)",
+        "trace_frontier_bootstrap": "Efficient Frontier (bootstrap)",
+        "trace_selected_portfolio_bootstrap":  "Selected Portfolio (bootstrap)"
     }
 }
 

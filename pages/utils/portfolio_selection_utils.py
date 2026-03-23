@@ -1,23 +1,20 @@
 import streamlit as st
 import pandas as pd
 from services.MarketData_V2 import MarketData_V2
-from services.ReturnsCovarianceModel import ReturnsCovarianceModel
+from services.SimpleReturnsCovarianceModel import SimpleReturnsCovarianceModel
 
 from pages.utils.main_utils import *
 
 def default_market_data():
     return MarketData_V2(db_path())
 
-def default_covariance_model(market_data):
-    return ReturnsCovarianceModel(market_data=market_data)
-
-def load_covariance_model_returns(covariance_model):
+def load_pipeline_returns(pipeline):
     return_bandwidth_value = get_config()['return_bandwidth_value']
 
-    if return_bandwidth_value is not None and return_bandwidth_value >= covariance_model.market_data.returns_len - 1:
-        return_bandwidth_value = covariance_model.market_data.returns_len - 2
+    if return_bandwidth_value is not None and return_bandwidth_value >= pipeline.returns_len - 1:
+        return_bandwidth_value = pipeline.returns_len - 2
 
-    covariance_model.estimate_expected_returns(
+    pipeline.estimate_expected_returns(
         estimation_method = get_config()['return_estimation_method'],
         bandwidth_method = get_config()['return_bandwidth_method'],
         bandwidth_value = get_config()['return_bandwidth_value'],
@@ -25,19 +22,20 @@ def load_covariance_model_returns(covariance_model):
     )
     
 
-def load_covariance_model_covariance(covariance_model):
+def load_pipeline_covariance(pipeline):
     covariance_bandwidth_value = get_config()['covariance_bandwidth_value']
 
-    if covariance_bandwidth_value is not None and covariance_bandwidth_value >= covariance_model.market_data.returns_len - 1:
-        covariance_bandwidth_value = covariance_model.market_data.returns_len - 2
+    if covariance_bandwidth_value is not None and covariance_bandwidth_value >= pipeline.returns_len - 1:
+        covariance_bandwidth_value = pipeline.returns_len - 2
 
-    covariance_model.estimate_covariance_matrix(
+    pipeline.estimate_covariance_matrix(
         covariance_method = get_config()['covariance_estimation_method'],
         bandwidth_method = get_config()['covariance_bandwidth_method'],
         bandwidth_value = covariance_bandwidth_value,
-        weighting_method = ReturnsCovarianceModel.WeightingMethod.BARLETT, 
+        weighting_method = SimpleReturnsCovarianceModel.WeightingMethod.BARLETT, 
         lmb = None
     )
+    
 
 def validate_import_df(market_data, df):
     valid = True
