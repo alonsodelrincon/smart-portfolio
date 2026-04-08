@@ -297,10 +297,6 @@ if market_data.from_date != slider_from or market_data.to_date != slider_to:
 
 st.session_state.market_data = market_data
 
-st.write(market_data.active_assets_metadata)
-
-st.stop()
-
 loaded = load_key('main_pipeline', BasePipeline(market_data=market_data))
 
 main_pipeline = st.session_state.main_pipeline
