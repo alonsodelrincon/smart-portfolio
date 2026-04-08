@@ -106,6 +106,18 @@ class BootstrapPipeline():
         return self.return_cov_model.expected_returns
     
     @property
+    def covariance_matrix_stats(self) -> pd.DataFrame:
+        return self.return_cov_model.covariance_matrix_stats
+    
+    @property
+    def correlation_matrix_stats(self) -> pd.DataFrame:
+        return self.return_cov_model.correlation_matrix_stats
+    
+    @property
+    def expected_returns_stats(self) -> pd.DataFrame:
+        return self.return_cov_model.expected_returns_stats
+
+    @property
     def bootstrap_covariance_matrices(self):
         return [rcv.covariance_matrix for rcv in self.return_cov_model.models]
     
@@ -156,7 +168,7 @@ class BootstrapPipeline():
     @property
     def bootstrap_efficient_frontiers(self):
         return [opt.efficient_frontier for opt in self.bootstrap_portfolio_optimizers]
-    
+
     @property
     def individual_portfolios(self):
         return self.portfolio_optimizer.individual_portfolios
@@ -164,4 +176,6 @@ class BootstrapPipeline():
     def custom_portfolio(self, w: np.array, name: str = None) -> Portfolio:
         return Portfolio(self.return_cov_model, w, name)
     
+    def bootstrap_portfolio_estimations(self, p: Portfolio):
+        return [Portfolio(rcv, p.weights) for rcv in self.return_cov_model.models]
 

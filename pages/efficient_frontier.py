@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import numpy as np
 from pages.utils.main_utils import *
 from pages.utils.translations import translations_efficient_frontier
+from scipy.stats import gaussian_kde
 
 set_page_translations(translations_efficient_frontier, lang=get_config()['lang'])
 
@@ -19,13 +20,15 @@ first_page_load = set_page(page = 3)
 
 #SPECIFIC GRAPHIC FUNCTIONS
 
-def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios = None, custom_portfolios = None, bootstrap_efficient_frontier = None):
+def plot_efficient_frontier(efficient_frontier, selected_portfolio_index, individual_portfolios = None, custom_portfolios = None):
     portfolio_risks = [x.annual_risk for x in efficient_frontier]
     portfolio_returns = [x.annual_expected_return for x in efficient_frontier]
 
-    selected_portfolio = efficient_frontier[efficient_frontier_selected_portfolio]
+    selected_portfolio = efficient_frontier[selected_portfolio_index]
 
     efficient_frontier_fig = go.Figure()
+
+    #LINEA
 
     efficient_frontier_fig.add_trace(
         go.Scatter(
@@ -37,6 +40,8 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
         )
     )
 
+    #SELECTOR DE CARTERA
+
     efficient_frontier_fig.add_trace(
         go.Scatter(
             x=[selected_portfolio.annual_risk],
@@ -46,32 +51,6 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
             name = tr("trace_selected_portfolio")
         )
     )
-
-    if bootstrap_efficient_frontier is not None:
-        bootstrap_portfolio_risks = [x.annual_risk for x in bootstrap_efficient_frontier]
-        bootstrap_portfolio_returns = [x.annual_expected_return for x in bootstrap_efficient_frontier]
-
-        bootstrap_selected_portfolio = bootstrap_efficient_frontier[efficient_frontier_selected_portfolio]
-
-        efficient_frontier_fig.add_trace(
-            go.Scatter(
-                x=bootstrap_portfolio_risks,
-                y=bootstrap_portfolio_returns,
-                mode='lines',
-                marker=dict(color='gray'),
-                name = tr("trace_frontier_bootstrap")
-            )
-        )
-
-        efficient_frontier_fig.add_trace(
-            go.Scatter(
-                x=[bootstrap_selected_portfolio.annual_risk],
-                y=[bootstrap_selected_portfolio.annual_expected_return],
-                mode='markers',
-                marker=dict(size=10, color='gray'),
-                name = tr("trace_selected_portfolio_bootstrap")
-            )
-        )
 
     if individual_portfolios is not None:
         ind_portfolio_risks = [x.annual_risk for x in individual_portfolios]
@@ -115,19 +94,155 @@ def plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_port
         title="",
         xaxis=dict(
             title = tr("xaxis_risk"),
-            #range=[min(portfolio_risks) - risk_range*margin, max(portfolio_risks) + risk_range*margin],
+            range=[min(portfolio_risks) - risk_range*margin, max(portfolio_risks) + risk_range*margin],
             fixedrange=False
         ),
         yaxis=dict(
             title = tr("yaxis_return"),
-            #range=[min(portfolio_returns) - return_range*margin, max(portfolio_returns) + return_range*margin],
-            fixedrange=False
+            range=[min(portfolio_returns) - return_range*margin, max(portfolio_returns) + return_range*margin],
+            fixedrange=False,
+            tickformat=".2%",
         ),
-        template="plotly_white"
+        template="plotly_white",
+        width=600,
+        height=600
     )
 
     st.plotly_chart(efficient_frontier_fig, width="stretch")
 
+def plot_bootstrap_efficient_frontier(bootstrap_efficient_frontier, selected_portfolio_index, bootstrap_selected_portfolio_estimations, individual_portfolios = None, custom_portfolios = None):
+    efficient_frontier_portfolio_risks = [x.annual_risk for x in bootstrap_efficient_frontier]
+    efficient_frontier_portfolio_returns = [x.annual_expected_return for x in bootstrap_efficient_frontier]
+
+    selected_portfolio = bootstrap_efficient_frontier[selected_portfolio_index]
+
+    selected_portfolio_risk_estimations = [x.annual_risk for x in bootstrap_selected_portfolio_estimations]
+    selected_portfolio_return_estimations = [x.annual_expected_return for x in bootstrap_selected_portfolio_estimations]
+
+    efficient_frontier_fig = go.Figure()
+
+    #BOOTSTRAP HEATMAP
+    
+    xy = np.vstack([selected_portfolio_risk_estimations, selected_portfolio_return_estimations])
+    kde = gaussian_kde(xy)
+
+    xgrid = np.linspace(np.min(selected_portfolio_risk_estimations),
+                        np.max(selected_portfolio_risk_estimations), 150)
+    ygrid = np.linspace(np.min(selected_portfolio_return_estimations),
+                        np.max(selected_portfolio_return_estimations), 150)
+
+    X, Y = np.meshgrid(xgrid, ygrid)
+
+    Z = kde(np.vstack([X.ravel(), Y.ravel()])).reshape(X.shape)
+
+    colorscale = [
+        [0.0, 'rgba(247,251,255,0)'],
+        [0.3, 'rgba(222,235,247,0.15)'],
+        [0.6, 'rgba(198,219,239,0.25)'],
+        [0.8, 'rgba(158,202,225,0.35)'],
+        [1.0, 'rgba(107,174,214,0.45)']
+    ]
+
+    efficient_frontier_fig.add_trace(go.Heatmap(
+        x=xgrid,
+        y=ygrid,
+        z=Z,
+        colorscale=colorscale,
+        showscale=False,
+        zsmooth='best'
+    ))
+
+    efficient_frontier_fig.add_trace(
+        go.Scatter(
+            x=selected_portfolio_risk_estimations,
+            y=selected_portfolio_return_estimations,
+            mode='markers',
+            marker=dict(size=1, color='white'),
+            name = tr("selected_portfolio_bootstrap_estimations")
+        )
+    )
+
+    #LÍNEA
+
+    efficient_frontier_fig.add_trace(
+        go.Scatter(
+            x=efficient_frontier_portfolio_risks,
+            y=efficient_frontier_portfolio_returns,
+            mode='lines',
+            marker=dict(color='blue'),
+            name = tr("trace_frontier")
+        )
+    )
+
+    #SELECTOR DE CARTERA
+
+    efficient_frontier_fig.add_trace(
+        go.Scatter(
+            x=[selected_portfolio.annual_risk],
+            y=[selected_portfolio.annual_expected_return],
+            mode='markers',
+            marker=dict(size=10, color='blue'),
+            name = tr("trace_selected_portfolio")
+        )
+    )
+
+    if individual_portfolios is not None:
+        ind_portfolio_risks = [x.annual_risk for x in individual_portfolios]
+        ind_portfolio_returns = [x.annual_expected_return for x in individual_portfolios]
+        ind_portfolio_names = [x.name for x in individual_portfolios]
+
+        efficient_frontier_fig.add_trace(
+            go.Scatter(
+                x=ind_portfolio_risks,
+                y=ind_portfolio_returns,
+                mode='markers+text',
+                marker=dict(size=10, color='red'),
+                text=ind_portfolio_names,
+                textposition="top center",
+                name=tr("trace_individual_portfolios")
+            )
+        )
+
+    if custom_portfolios is not None:
+        pers_portfolio_risks = [x.annual_risk for x in custom_portfolios]
+        pers_portfolio_returns = [x.annual_expected_return for x in custom_portfolios]
+        pers_portfolio_names = [x.name for x in custom_portfolios]
+
+        efficient_frontier_fig.add_trace(
+            go.Scatter(
+                x=pers_portfolio_risks,
+                y=pers_portfolio_returns,
+                mode='markers+text',
+                marker=dict(size=10, color='green'),
+                text=pers_portfolio_names,
+                textposition="top center",
+                name=tr("trace_custom_portfolios")
+            )
+        )
+
+    margin = 0.5
+    risk_range = max(efficient_frontier_portfolio_risks) - min(efficient_frontier_portfolio_risks)
+    return_range = max(efficient_frontier_portfolio_returns) - min(efficient_frontier_portfolio_returns)
+
+    efficient_frontier_fig.update_layout(
+        title="",
+        xaxis=dict(
+            title = tr("xaxis_risk"),
+            #range=[min(efficient_frontier_portfolio_risks) - risk_range*margin, max(efficient_frontier_portfolio_risks) + risk_range*margin],
+            fixedrange=False
+        ),
+        yaxis=dict(
+            title = tr("yaxis_return"),
+            #range=[min(efficient_frontier_portfolio_returns) - return_range*margin, max(efficient_frontier_portfolio_returns) + return_range*margin],
+            fixedrange=False,
+            tickformat=".2%",
+        ),
+        template="plotly_white",
+        width=600,
+        height=600
+    )
+
+    st.plotly_chart(efficient_frontier_fig, width="stretch")
 
 def plot_selected_portfolio(portfolio):
     names = portfolio.assets.asset_name
@@ -223,10 +338,16 @@ with col2:
     )
 
 individual_portfolios = None
+bootstrap_individual_portfolios = None
+
 if show_individual_assets:
     individual_portfolios = main_pipeline.individual_portfolios
 
+    if get_config()['active_bootstrap']:
+        bootstrap_individual_portfolios = bootstrap_pipeline.individual_portfolios
+
 custom_portfolio_list = None
+bootstrap_custom_portfolio_list = None
 if show_custom_portfolios:
     column_config = {}
 
@@ -264,24 +385,34 @@ if show_custom_portfolios:
     custom_portfolio[main_pipeline.assets.index] = custom_portfolio[main_pipeline.assets.index].fillna(0)
 
     tmp_portfolios = []
+    tmp_bootstrap_portfolios = []
 
     for id, portfolio in custom_portfolio.iterrows():
-        w = np.array(portfolio[custom_portfolio.assets.index])
+        w = np.array(portfolio[main_pipeline.assets.index])
 
         if sum(w) != 0:
             w = w/sum(w)
 
-            tmp_portfolios.append(custom_portfolio.custom_portfolio(w = w, name = portfolio['name']))
+            tmp_portfolios.append(main_pipeline.custom_portfolio(w = w, name = portfolio['name']))
 
-        if len(tmp_portfolios) > 0:
-            custom_portfolio_list = tmp_portfolios
+            if get_config()['active_bootstrap']:
+                tmp_bootstrap_portfolios.append(bootstrap_pipeline.custom_portfolio(w = w, name = portfolio['name']))
+
+    if len(tmp_portfolios) > 0:
+        custom_portfolio_list = tmp_portfolios
+
+    if len(tmp_bootstrap_portfolios) > 0:
+        bootstrap_custom_portfolio_list = tmp_bootstrap_portfolios
 
 
 frontier_col, portfolio_col = st.columns([2, 1])
 
-#with frontier_col:
-plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios, custom_portfolio_list, bootstrap_efficient_frontier)
-#with portfolio_col:
+plot_efficient_frontier(efficient_frontier, efficient_frontier_selected_portfolio, individual_portfolios, custom_portfolio_list)
+
+if get_config()['active_bootstrap']:
+    bootstrap_selected_portfolio_estimations = bootstrap_pipeline.bootstrap_portfolio_estimations(p = bootstrap_efficient_frontier[efficient_frontier_selected_portfolio])
+    plot_bootstrap_efficient_frontier(bootstrap_efficient_frontier, efficient_frontier_selected_portfolio, bootstrap_selected_portfolio_estimations, bootstrap_individual_portfolios, bootstrap_custom_portfolio_list)
+
 
 if get_config()['active_bootstrap']:
     _, col1, col2, _ = st.columns([1,3,3,1])

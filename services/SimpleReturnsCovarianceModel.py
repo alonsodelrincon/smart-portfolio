@@ -61,17 +61,30 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
 
         if estimation_method == SimpleReturnsCovarianceModel.ExpectedReturnEstimationMethod.SIMPLE:
 
-            self._expected_returns = self.data_provider.returns.mean()
+            #self._expected_returns = self.data_provider.returns.mean()
+
+            self._expected_returns = pd.Series(
+                np.mean(self.data_provider.returns.values, axis=0),
+                index=self.data_provider.returns.columns
+            )
+
             self._expected_returns = self._expected_returns.to_frame('expected_return')
             self._expected_returns.index.name = 'asset'
             return self._expected_returns
         
         elif estimation_method == SimpleReturnsCovarianceModel.ExpectedReturnEstimationMethod.SHRINKAGE:
-            self._expected_returns = self.data_provider.returns.mean()
+            #self._expected_returns = self.data_provider.returns.mean()
+            
+            self._expected_returns = pd.Series(
+                np.mean(self.data_provider.returns.values, axis=0),
+                index=self.data_provider.returns.columns
+            )
+
             self._expected_returns = self._expected_returns.to_frame('expected_return')
             self._expected_returns.index.name = 'asset'
 
-            asset_average_return =  self._expected_returns.mean()
+            #asset_average_return =  self._expected_returns.mean()
+            asset_average_return =  np.mean(self._expected_returns)
 
             self._expected_returns = self._expected_returns * lmb + asset_average_return * (1 - lmb)
 
@@ -92,7 +105,13 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
                 tmp = tmp[(tmp > P_05)]
                 tmp = tmp[(tmp < P_95)]
 
-                self._expected_returns = tmp.mean()
+                #self._expected_returns = tmp.mean()
+                
+                self._expected_returns = pd.Series(
+                    np.mean(tmp.values, axis=0),
+                    index=self.data_provider.returns.columns
+                )
+
                 self._expected_returns = self._expected_returns.to_frame('expected_return')
                 self._expected_returns.index.name = 'asset'
                 return self._expected_returns
@@ -105,7 +124,13 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
 
                 tmp = tmp.clip(lower=P_05, upper=P_95, axis=1)
 
-                self._expected_returns = tmp.mean()
+                #self._expected_returns = tmp.mean()
+
+                self._expected_returns = pd.Series(
+                    np.mean(tmp.values, axis=0),
+                    index=self.data_provider.returns.columns
+                )
+                
                 self._expected_returns = self._expected_returns.to_frame('expected_return')
                 self._expected_returns.index.name = 'asset'
                 return self._expected_returns
@@ -174,7 +199,14 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
         self._reset_correlation_matrix()
 
         if covariance_method == SimpleReturnsCovarianceModel.CovarianceMethod.SIMPLE:
-            self._covariance_matrix = self.data_provider.returns.cov()
+            #self._covariance_matrix = self.data_provider.returns.cov()
+
+            self._covariance_matrix = pd.DataFrame(
+                np.cov(self.data_provider.returns.values, rowvar=False),
+                index=self.data_provider.returns.columns,
+                columns=self.data_provider.returns.columns
+            )
+
             self._covariance_matrix.index.name = 'covariance'
             self._covariance_matrix.columns.name = 'covariance'
         elif covariance_method == SimpleReturnsCovarianceModel.CovarianceMethod.NEWEY_WEST:
@@ -185,9 +217,15 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
 
             lags = bandwidth_value
 
-            df_returns_mean = self.data_provider.returns.mean()
+            #df_returns_mean = self.data_provider.returns.mean()
+            df_returns_mean = np.mean(self.data_provider.returns)
 
-            self._covariance_matrix = self.data_provider.returns.cov()
+            #self._covariance_matrix = self.data_provider.returns.cov()
+            self._covariance_matrix = pd.DataFrame(
+                np.cov(self.data_provider.returns.values, rowvar=False),
+                index=self.data_provider.returns.columns,
+                columns=self.data_provider.returns.columns
+            )
 
             for k in range(1, lags+1):
                 w = self._weight(k=k, m=lags, lmb=lmb, weighting_method=weighting_method)
@@ -254,7 +292,8 @@ class SimpleReturnsCovarianceModel(ReturnsCovarianceModel):
         cols = df_lag.columns
 
         if df_mean is None:
-            df_mean = df.mean()
+            #df_mean = df.mean()
+            df_mean = np.mean(df)
 
         A = (df-df_mean).astype(np.float64)
         B = (df_lag-df_mean).astype(np.float64)

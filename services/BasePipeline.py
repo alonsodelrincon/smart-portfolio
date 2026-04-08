@@ -2,7 +2,10 @@ from services.MarketData_V2 import MarketData_V2
 from services.MarketDataProvider import MarketDataProvider
 from services.SimpleReturnsCovarianceModel import SimpleReturnsCovarianceModel
 from services.PortfolioOptimizerModel import PortfolioOptimizerModel
+from services.Portfolio import Portfolio
 import pandas as pd
+import numpy as np
+
 
 class BasePipeline():
     def __init__(self, market_data: MarketData_V2):
@@ -117,4 +120,6 @@ class BasePipeline():
     def individual_portfolios(self):
         return self.portfolio_optimizer_model.individual_portfolios
     
+    def custom_portfolio(self, w: np.array, name: str = None) -> Portfolio:
+        return Portfolio(self.returns_cov_model, w, name)
 

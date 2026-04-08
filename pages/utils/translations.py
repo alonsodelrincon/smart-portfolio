@@ -262,7 +262,8 @@ translations_portfolio_selection = {
         "expander_covariance_matrix": "Matriz de covarianzas",
         "plot_covariance_matrix_title": "Matriz de Covarianzas diarias",
         "simple_estimates": "Estimaciones con datos reales",
-        "bootstrap_estimates": "Estimaciones basadas en bootstrap"
+        "bootstrap_estimates": "Estimaciones basadas en bootstrap",
+        "cov_matrix_CV": "Coeficiente de variación de la matriz de covarianza"
     },
     "en": {
         "page_title": "Portfolio Selection",
@@ -288,7 +289,8 @@ translations_portfolio_selection = {
         "expander_covariance_matrix": "Covariance matrix",
         "plot_covariance_matrix_title": "Daily covariance matrix",
         "simple_estimates": "Real-data estimates",
-        "bootstrap_estimates": "Bootstrap-based estimates"
+        "bootstrap_estimates": "Bootstrap-based estimates",
+        "cov_matrix_CV": "Covariance matrix Coefficient of Variation"
     }
 }
 
@@ -706,7 +708,8 @@ translations_efficient_frontier = {
         "error_assets_not_defined": "¡Error! Debes definir los activos primero",
         "subheader_selected_bootstrap_portfolio": "Cartera seleccionada (bootstrap)",
         "trace_frontier_bootstrap": "Frontera eficiente (bootstrap)",
-        "trace_selected_portfolio_bootstrap":  "Cartera seleccionada (bootstrap)"
+        "trace_selected_portfolio_bootstrap":  "Cartera seleccionada (bootstrap)",
+        "selected_portfolio_bootstrap_estimations": "Nube de estimaciones de la cartera seleccionada"
     },
     "en": {
         "page_title": "Efficient Frontier",
@@ -739,7 +742,8 @@ translations_efficient_frontier = {
         "error_assets_not_defined": "Error! You must define the assets first",
         "subheader_selected_bootstrap_portfolio": "Selected portfolio (bootstrap)",
         "trace_frontier_bootstrap": "Efficient Frontier (bootstrap)",
-        "trace_selected_portfolio_bootstrap":  "Selected Portfolio (bootstrap)"
+        "trace_selected_portfolio_bootstrap":  "Selected Portfolio (bootstrap)",
+        "selected_portfolio_bootstrap_estimations": "Selected Portfolio estimations cloud"
     }
 }
 

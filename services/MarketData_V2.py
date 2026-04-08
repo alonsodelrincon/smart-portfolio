@@ -14,7 +14,7 @@ class MarketData_V2:
 
         self._selected_assets = []
 
-        self._imported_assets_metadata = pd.DataFrame(columns=['source','file','asset_name','America','Europe','Asia'])
+        self._imported_assets_metadata = pd.DataFrame(columns=['source','file','asset_name','America','Europe','Asia', 'marketCap', 'currency'])
 
         self._local_assets_df = pd.DataFrame()
         self._imported_assets_df_cache = pd.DataFrame()
@@ -108,6 +108,14 @@ class MarketData_V2:
         return self._local_assets_metadata[['asset_name']].loc[self._selected_assets]
     
     @property
+    def local_assets_metadata(self):
+        return self._local_assets_metadata
+    
+    @property
+    def selected_assets_metadata(self):
+        return self._local_assets_metadata.loc[self._selected_assets]
+    
+    @property
     def imported_assets(self):
         return self._imported_assets_metadata[['asset_name']]
 
@@ -118,6 +126,10 @@ class MarketData_V2:
     @property
     def active_assets(self):
         return pd.concat([self.selected_assets, self.imported_assets]) 
+    
+    @property
+    def active_assets_metadata(self):
+        return pd.concat([self.imported_assets_metadata, self.selected_assets_metadata])
 
 
     def select_assets(self, assets: list[str]) -> None:
@@ -137,19 +149,23 @@ class MarketData_V2:
 
         diversification = diversification or {}
 
+        ticker_data = yf.Ticker(ticker)
+
         ticker_info = {
             'source': 'yf',
             'asset_name': name,
             'America': diversification.get('America'),
             'Europe': diversification.get('Europe'),
-            'Asia': diversification.get('Asia')
+            'Asia': diversification.get('Asia'),
+            'marketCap': ticker_data.info.get("marketCap"),
+            'currency': ticker_data.info['currency']
         }
 
         self._imported_assets_metadata.loc[ticker] = ticker_info
         self._reset_dates()
 
     def reset_imported_assets(self):
-        self._imported_assets_metadata = pd.DataFrame(columns=['source','file','asset_name','America','Europe','Asia'])
+        self._imported_assets_metadata = pd.DataFrame(columns=['source','file','asset_name','America','Europe','Asia', 'marketCap', 'currency'])
         self._imported_assets_df_cache = pd.DataFrame()
 
     def _reset_dates(self):
@@ -288,3 +304,62 @@ class MarketData_V2:
     
     def asset_name(self, asset: str):
         return self.active_assets.loc[asset].asset_name
+
+    
+    def _currency_exchange(self, from_currency: str, to_currency: str):
+        exchange_map = pd.DataFrame()
+
+        exchange_map = pd.DataFrame(index=[
+            'EURUSD=X', 'GBPUSD=X', 'AUDUSD=X', 'NZDUSD=X',
+            'EURGBP=X', 'EURJPY=X', 'GBPJPY=X', 'EURCAD=X',
+            'EURSEK=X', 'EURCHF=X', 'EURHUF=X', 'USDJPY=X',
+            'USDCHF=X', 'USDCNY=X', 'USDZAR=X', 'USDINR=X',
+            'USDSGD=X', 'USDMXN=X', 'USDPHP=X', 'USDTHB=X',
+            'USDIDR=X'
+        ])
+
+        exchange_map['from'] = [
+            'EUR', 'GBP', 'AUD', 'NZD', 'EUR', 'EUR', 'GBP', 'EUR',
+            'EUR', 'EUR', 'EUR', 'USD', 'USD', 'USD', 'USD', 'USD',
+            'USD', 'USD', 'USD', 'USD', 'USD'
+        ]
+
+        exchange_map['to'] = [
+            'USD', 'USD', 'USD', 'USD', 'GBP', 'JPY', 'JPY', 'CAD',
+            'SEK', 'CHF', 'HUF', 'JPY', 'CHF', 'CNY', 'ZAR', 'INR',
+            'SGD', 'MXN', 'PHP', 'THB', 'IDR'
+        ]
+
+        exchange_ticker = None
+        inverted_exchange = False
+
+        if ((exchange_map['from'] == from_currency) & (exchange_map['to'] == to_currency)).any():
+            exchange_ticker = exchange_map[(exchange_map['from'] == from_currency) & (exchange_map['to'] == to_currency)].index[0]
+
+        if ((exchange_map['to'] == from_currency) & (exchange_map['from'] == to_currency)).any():
+            exchange_ticker = exchange_map[(exchange_map['to'] == from_currency) & (exchange_map['from'] == to_currency)].index[0]
+            inverted_exchange = True
+        
+        exchange_data = yf.Ticker(exchange_ticker).history(start="1900-01-01", auto_adjust=False)
+
+        exchange_df = pd.DataFrame({
+            'exchange_rate': exchange_data['Close']
+        }, index=exchange_data.index)
+
+        exchange_df.index.name = 'date'
+
+        if inverted_exchange:
+            exchange_df['exchange_rate'] = 1/exchange_df['exchange_rate']
+
+        if exchange_df.empty:
+            raise ValueError(f"No data returned for exchange {exchange_ticker}")
+
+        exchange_df.index = exchange_df.index.tz_localize(None)
+
+        exchange_df = exchange_df.asfreq('D')
+        exchange_df = exchange_df.ffill()
+        exchange_df = exchange_df.bfill()
+        
+        return exchange_df
+
+

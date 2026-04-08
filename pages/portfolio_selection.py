@@ -6,6 +6,7 @@ from pages.utils.portfolio_selection_utils import *
 from pages.utils.translations import translations_portfolio_selection
 from services.BasePipeline import BasePipeline
 from services.BootstrapPipeline import BootstrapPipeline
+import numpy as np
 
 
 set_page_translations(translations_portfolio_selection, lang=get_config()['lang'])
@@ -55,25 +56,109 @@ def plot_cor_matrix(pipeline):
 
     st.plotly_chart(fig_cor, width='content')
 
-def plot_return_bars(pipeline):
+def plot_cov_cv_matrix(bootstrap_pipeline):
+    fig_cv = go.Figure(
+        data=go.Heatmap(
+            zmin=0,
+            zmax=0.5,
+            z=bootstrap_pipeline.covariance_matrix_stats['std'].values / np.abs(bootstrap_pipeline.covariance_matrix_stats['mean'].values),
+            x=[bootstrap_pipeline.asset_name(asset=asset) for asset in bootstrap_pipeline.correlation_matrix.columns],
+            y=[bootstrap_pipeline.asset_name(asset=asset) for asset in bootstrap_pipeline.correlation_matrix.index],
+            colorscale='Blues',
+            colorbar=dict(
+                len=1,
+                lenmode="fraction",
+                y=0.5,
+                yanchor="middle",
+                tickformat=".0%"
+            )
+        )
+    )
+    
+    fig_cv.update_xaxes(tickangle=45, tickfont=dict(size=10))
+    fig_cv.update_yaxes(tickfont=dict(size=10))
+    fig_cv.update_layout(margin=dict(l=50, r=50, t=50, b=50))
+
+    fig_cv.update_layout(
+        title=tr("cov_matrix_CV"),
+        yaxis=dict(autorange="reversed"),
+    )
+
+    fig_cv.update_yaxes(
+        tickfont=dict(size=10),
+        scaleanchor="x",
+        scaleratio=1
+    )
+
+    st.plotly_chart(fig_cv, width='content')
+
+def plot_return_bars(pipeline, lower_CI = None, upper_CI = None):
     fig_expected_returns = go.Figure()
 
-    fig_expected_returns.add_trace(go.Bar(
-        x=[pipeline.asset_name(asset=asset) for asset in pipeline.expected_returns.index],
-        y=pipeline.expected_returns.expected_return,
-        marker=dict(
-            color="#3182BD"
-        )
-    ))
+    if lower_CI is None or upper_CI is None :
+        fig_expected_returns.add_trace(go.Bar(
+            x=[pipeline.asset_name(asset=asset) for asset in pipeline.expected_returns.index],
+            y=pipeline.expected_returns.expected_return,
+            marker=dict(
+                color="#3182BD"
+            )
+        ))
+    else:
+        fig_expected_returns.add_trace(go.Bar(
+            x=[pipeline.asset_name(asset=asset) for asset in pipeline.expected_returns.index],
+            y=pipeline.expected_returns.expected_return,
+            marker=dict(
+                color="#3182BD"
+            ),
+            
+            error_y=dict(
+                type='data',
+                symmetric=False,
+                array=upper_CI,
+                arrayminus=lower_CI
+            )
+        ))
 
     fig_expected_returns.update_layout(
         title=tr("plot_expected_returns_title"),
         xaxis_title=tr("plot_expected_returns_x"),
         yaxis_title=tr("plot_expected_returns_y"),
+        yaxis=dict(
+            tickformat=".2%",
+        ),
         template="plotly_white"
     )
 
     st.plotly_chart(fig_expected_returns, width='content')
+
+def plot_return_violins(bootstrap_pipeline):
+    fig = go.Figure()
+
+    for asset in bootstrap_pipeline.bootstrap_expected_returns[0].index:
+        values = [
+            df.loc[asset, 'expected_return']
+            for df in bootstrap_pipeline.bootstrap_expected_returns
+        ]
+        
+        fig.add_trace(go.Violin(
+            y=values,
+            name=bootstrap_pipeline.asset_name(asset=asset),
+            box_visible=True,
+            meanline_visible=True
+        ))
+
+    fig.update_layout(
+        title=tr("plot_expected_returns_title"),
+        xaxis_title=tr("plot_expected_returns_x"),
+        yaxis_title=tr("plot_expected_returns_y"),
+        yaxis=dict(
+            tickformat=".2%",
+        ),
+        template="plotly_white"
+    )
+
+
+    st.plotly_chart(fig, width='stretch')
 
 def plot_cov_matrix(pipeline):
     fig_cov = go.Figure(
@@ -212,6 +297,10 @@ if market_data.from_date != slider_from or market_data.to_date != slider_to:
 
 st.session_state.market_data = market_data
 
+st.write(market_data.active_assets_metadata)
+
+st.stop()
+
 loaded = load_key('main_pipeline', BasePipeline(market_data=market_data))
 
 main_pipeline = st.session_state.main_pipeline
@@ -315,23 +404,19 @@ with returns:
 with st.expander(tr("expander_covariance_matrix")):
     plot_cov_matrix(main_pipeline)
 
-
-st.subheader(tr("bootstrap_estimates"))
-
 if get_config()['active_bootstrap']:
+    st.subheader(tr("bootstrap_estimates"))
+
+    plot_return_violins(bootstrap_pipeline)
+
     #MATRIZ DE CORRELACIÓN Y RETORNOS (BOOTSTRAP)
 
-    cor, returns = st.columns([1, 1])
+    cov, cov_CV = st.columns([1, 1])
 
-    with cor:
-        plot_cor_matrix(bootstrap_pipeline)
-        
-    with returns:
-        plot_return_bars(bootstrap_pipeline)
-
-    #MATRIZ DE COVARIANZA (BOOTSTRAP)
-
-    with st.expander(tr("expander_covariance_matrix")):
+    with cov:
         plot_cov_matrix(bootstrap_pipeline)
+
+    with cov_CV:
+        plot_cov_cv_matrix(bootstrap_pipeline)
 
 footer()
