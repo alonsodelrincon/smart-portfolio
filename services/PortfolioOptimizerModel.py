@@ -155,7 +155,9 @@ class PortfolioOptimizerModel:
         for i in range(self.n_assets):
             w = np.array([1 if i == j else 0 for j in range(self.n_assets)])
 
-            name = self.assets.asset_name[i]
+
+
+            name = self.assets.asset_name.iloc[i]
 
             individual_portfolios.append(Portfolio(self.returns_covariance_model, w, name))
 
