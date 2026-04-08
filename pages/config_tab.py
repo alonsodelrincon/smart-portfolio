@@ -262,8 +262,8 @@ bootstrap_block_size = None
 if active_bootstrap:
     bootstrap_sample_size = st.number_input(
         tr("sample_size"),
-        min_value = 5, 
-        max_value = 2000,
+        min_value = 20, 
+        max_value = 1000,
         step = 1,
         key="_bootstrap_sample_size",
         on_change=write_widget,
@@ -273,7 +273,7 @@ if active_bootstrap:
     bootstrap_block_size = st.number_input(
         tr("block_size"),
         min_value = 5, 
-        max_value = 2000,
+        max_value = 200,
         step = 1,
         key="_bootstrap_block_size",
         on_change=write_widget,
