@@ -246,6 +246,8 @@ efficient_frontier_n_steps = st.number_input(
     args=["efficient_frontier_n_steps"]
 )
 
+st.divider()
+
 #CONFIGURACION BOOTSTRAP
 
 st.header(tr("bootstrap_config"))
@@ -262,7 +264,7 @@ bootstrap_block_size = None
 if active_bootstrap:
     bootstrap_sample_size = st.number_input(
         tr("sample_size"),
-        min_value = 20, 
+        min_value = 50, 
         max_value = 1000,
         step = 1,
         key="_bootstrap_sample_size",
@@ -272,7 +274,7 @@ if active_bootstrap:
 
     bootstrap_block_size = st.number_input(
         tr("block_size"),
-        min_value = 5, 
+        min_value = 10, 
         max_value = 200,
         step = 1,
         key="_bootstrap_block_size",

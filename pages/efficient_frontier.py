@@ -425,9 +425,9 @@ if get_config()['active_bootstrap']:
         st.subheader(tr("subheader_selected_bootstrap_portfolio"))
         plot_selected_portfolio(bootstrap_efficient_frontier[efficient_frontier_selected_portfolio])
 else:
-    _, col, _ = st.columns([1,2,1])
-
     st.subheader(tr("subheader_selected_portfolio"))
+    _, col, _ = st.columns([1,2,1])
+    
     with col:
         plot_selected_portfolio(efficient_frontier[efficient_frontier_selected_portfolio])
 
